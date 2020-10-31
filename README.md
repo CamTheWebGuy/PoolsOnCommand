@@ -1,7 +1,7 @@
 # Pools On Command
 A Membership Website for selling eBooks &amp; Digital Products\
 \
-React/Node/MongoDB Project is based off a ClickFunnels funnel from 2houragency.com. Recreating it in react for personal use as it is significantly cheaper and flexible.
+React/Node/MongoDB Project is based off a ClickFunnels funnel from 2houragency.com. Recreating it in react for personal use as it is significantly cheaper and flexible. Plus a good learning project.
 
 ## Backend:
 - [x] Login/Register Routes & Verification
