@@ -75,6 +75,9 @@ const ProductEdit = ({
     content: ''
   });
 
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+
   useEffect(() => {
     getOneProduct(match.params.id);
     setFormData({
@@ -170,7 +173,11 @@ const ProductEdit = ({
               <ListGroup>
                 <ListGroup.Item>
                   Item #1 Name{' '}
-                  <Button variant='success' style={{ marginLeft: '10px' }}>
+                  <Button
+                    variant='success'
+                    onClick={e => setShowEditForm(!showEditForm)}
+                    style={{ marginLeft: '10px' }}
+                  >
                     Edit
                   </Button>
                   <Button style={{ marginLeft: '10px' }} variant='danger'>
@@ -178,21 +185,62 @@ const ProductEdit = ({
                   </Button>
                 </ListGroup.Item>
               </ListGroup>
-              <div className='item-editor mgn-top-20'>
-                <Form.Label>Item Name</Form.Label>
-                <Form.Control type='text' placeholder='Item Name' />
-                <Form.Label className='mgn-top-20'>Item Content</Form.Label>
-                <ReactQuill
-                  theme='snow'
-                  onChange={e => handleContent(e)}
-                  value={content}
-                  modules={editorModules}
-                  formats={editorFormats}
-                />
-              </div>
-              <Button className='mgn-top-20' variant='success' type='submit'>
-                Add Item
-              </Button>
+              {!showEditForm && showAddForm && (
+                <div className='item-editor mgn-top-20'>
+                  <Form.Label>Item Name</Form.Label>
+                  <Form.Control type='text' placeholder='Item Name' />
+                  <Form.Label className='mgn-top-20'>Item Content</Form.Label>
+                  <ReactQuill
+                    theme='snow'
+                    onChange={e => handleContent(e)}
+                    value={content}
+                    modules={editorModules}
+                    formats={editorFormats}
+                  />
+                  <Button
+                    className='mgn-top-20'
+                    variant='success'
+                    type='button'
+                    onClick={e => setShowAddForm(!showAddForm)}
+                  >
+                    Save Item
+                  </Button>
+                </div>
+              )}
+
+              {!showAddForm && showEditForm && (
+                <div className='item-editor mgn-top-20'>
+                  <Form.Label>Item Name</Form.Label>
+                  <Form.Control type='text' placeholder='Item Name' />
+                  <Form.Label className='mgn-top-20'>Item Content</Form.Label>
+                  <ReactQuill
+                    theme='snow'
+                    onChange={e => handleContent(e)}
+                    value={content}
+                    modules={editorModules}
+                    formats={editorFormats}
+                  />
+                  <Button
+                    className='mgn-top-20'
+                    variant='success'
+                    type='button'
+                    onClick={e => setShowEditForm(!showEditForm)}
+                  >
+                    Save Item
+                  </Button>
+                </div>
+              )}
+
+              {!showEditForm && !showAddForm && (
+                <Button
+                  className='mgn-top-20'
+                  variant='success'
+                  type='button'
+                  onClick={e => setShowAddForm(!showAddForm)}
+                >
+                  Add Item
+                </Button>
+              )}
             </Form.Group>
             {/* <Form.Group>
               <ReactQuill
