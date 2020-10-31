@@ -25,7 +25,8 @@ router.patch(
         .isEmpty(),
       check('category', 'Product category is required')
         .not()
-        .isEmpty()
+        .isEmpty(),
+      check('price', 'Price must be a number').isFloat()
     ]
   ],
   async (req, res) => {

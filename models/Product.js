@@ -9,9 +9,9 @@ const ProductSchema = new mongoose.Schema({
     type: String
   },
   price: {
-    type: Number,
+    type: String,
     required: true,
-    default: 0
+    default: '0'
   },
   category: {
     type: String,

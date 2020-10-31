@@ -6,7 +6,8 @@ import {
   Form,
   Button,
   Spinner,
-  ListGroup
+  ListGroup,
+  InputGroup
 } from 'react-bootstrap';
 import { getOneProduct, updateProduct } from '../../actions/products';
 
@@ -97,13 +98,19 @@ const ProductEdit = ({
             </Form.Group>
             <Form.Group>
               <Form.Label>Product Price</Form.Label>
-              <Form.Control
-                name='price'
-                type='text'
-                placeholder='29.99'
-                value={price}
-                onChange={e => onChange(e)}
-              />
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>$</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  name='price'
+                  type='text'
+                  pattern='[0-9, .]+'
+                  placeholder='29.99'
+                  value={price}
+                  onChange={e => onChange(e)}
+                />
+              </InputGroup>
             </Form.Group>
             <Form.Group>
               <Form.Label>Category</Form.Label>

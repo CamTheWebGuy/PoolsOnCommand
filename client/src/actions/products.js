@@ -20,7 +20,9 @@ export const updateProduct = (id, name, price, category) => async dispatch => {
 
     dispatch(setAlert('Product Updated', 'success'));
   } catch (err) {
-    dispatch(setAlert('Error updating product', 'danger'));
+    dispatch(
+      setAlert('Error updating product, make sure price is a number', 'danger')
+    );
     console.log(err);
   }
 };
