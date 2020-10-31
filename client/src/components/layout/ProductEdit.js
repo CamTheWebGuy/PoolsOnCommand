@@ -9,9 +9,10 @@ import {
   Accordion,
   Tab,
   Nav,
-  Spinner
+  Spinner,
+  ListGroup
 } from 'react-bootstrap';
-import { getOneProduct } from '../../actions/products';
+import { getOneProduct, updateProduct } from '../../actions/products';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -59,6 +60,7 @@ const editorModules = {
 
 const ProductEdit = ({
   getOneProduct,
+  updateProduct,
   products: { products, loading },
   match
 }) => {
@@ -96,6 +98,11 @@ const ProductEdit = ({
     setContentField({ ...contentField, content: e });
   };
 
+  const onSubmit = async e => {
+    e.preventDefault();
+    updateProduct(match.params.id, name, price, category, content);
+  };
+
   return products.length < 1 ? (
     <Fragment>
       <section className='members__container'>
@@ -122,7 +129,7 @@ const ProductEdit = ({
           </h2>
           <hr />
 
-          <Form className='mgn-top-30'>
+          <Form className='mgn-top-30' onSubmit={e => onSubmit(e)}>
             <Form.Group>
               <Form.Label>Product Name</Form.Label>
               <Form.Control
@@ -158,6 +165,36 @@ const ProductEdit = ({
               </Form.Control>
             </Form.Group>
             <Form.Group>
+              <h3>Items:</h3>
+              <hr />
+              <ListGroup>
+                <ListGroup.Item>
+                  Item #1 Name{' '}
+                  <Button variant='success' style={{ marginLeft: '10px' }}>
+                    Edit
+                  </Button>
+                  <Button style={{ marginLeft: '10px' }} variant='danger'>
+                    Delete
+                  </Button>
+                </ListGroup.Item>
+              </ListGroup>
+              <div className='item-editor mgn-top-20'>
+                <Form.Label>Item Name</Form.Label>
+                <Form.Control type='text' placeholder='Item Name' />
+                <Form.Label className='mgn-top-20'>Item Content</Form.Label>
+                <ReactQuill
+                  theme='snow'
+                  onChange={e => handleContent(e)}
+                  value={content}
+                  modules={editorModules}
+                  formats={editorFormats}
+                />
+              </div>
+              <Button className='mgn-top-20' variant='success' type='submit'>
+                Add Item
+              </Button>
+            </Form.Group>
+            {/* <Form.Group>
               <ReactQuill
                 theme='snow'
                 onChange={e => handleContent(e)}
@@ -165,7 +202,8 @@ const ProductEdit = ({
                 modules={editorModules}
                 formats={editorFormats}
               />
-            </Form.Group>
+            </Form.Group> */}
+            <hr />
             <Button variant='primary' type='submit'>
               Save Changes
             </Button>
@@ -178,6 +216,7 @@ const ProductEdit = ({
 
 ProductEdit.propTypes = {
   getOneProduct: PropTypes.func.isRequired,
+  updateProduct: PropTypes.func.isRequired,
   products: PropTypes.object.isRequired
 };
 
@@ -185,4 +224,6 @@ const mapStateToProps = state => ({
   products: state.products
 });
 
-export default connect(mapStateToProps, { getOneProduct })(ProductEdit);
+export default connect(mapStateToProps, { getOneProduct, updateProduct })(
+  ProductEdit
+);
