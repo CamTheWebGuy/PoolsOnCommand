@@ -2,6 +2,35 @@ import axios from 'axios';
 import { setAlert } from './alert';
 import { GET_PRODUCTS } from './types';
 
+// Update Product
+export const updateProduct = (
+  id,
+  name,
+  price,
+  category,
+  content
+) => async dispatch => {
+  console.log('made it here');
+  try {
+    const config = {
+      withCredentials: true,
+      crossDomain: true,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const body = JSON.stringify({ name, price, category, content });
+
+    await axios.post(`/api/product/${id}`, body, config);
+
+    dispatch(setAlert('Product Updated', 'success'));
+  } catch (err) {
+    dispatch(setAlert('Error updating product', 'danger'));
+    console.log(err);
+  }
+};
+
 // Get ONE product by ID
 export const getOneProduct = id => async dispatch => {
   try {
