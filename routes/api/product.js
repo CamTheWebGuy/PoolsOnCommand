@@ -9,7 +9,50 @@ const Product = require('../../models/Product');
 const User = require('../../models/User');
 const { json } = require('express');
 
-// @route    PATCH api/product
+// @route    PATCH api/product/item/:id
+// @desc     Update a Product Item by ID
+// @access   Private/Admin
+router.patch(
+  '/item/:productId/:itemId',
+  [
+    auth,
+    [
+      check('title', 'Item must have a title')
+        .not()
+        .isEmpty(),
+      check('content', 'Item must have content')
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { title, content } = req.body;
+
+    const productFields = {
+      'items.$.title': title,
+      'items.$.content': content
+    };
+
+    try {
+      let product = await Product.findOneAndUpdate(
+        { _id: req.params.productId, 'items._id': req.params.itemId },
+        { $set: productFields },
+        { new: true, upsert: true }
+      );
+      res.json(product);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route    PATCH api/product/:id
 // @desc     Update a Product
 // @access   Private/Admin
 router.patch(

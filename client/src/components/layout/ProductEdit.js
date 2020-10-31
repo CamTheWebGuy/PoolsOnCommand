@@ -160,6 +160,7 @@ const ProductEdit = ({
                       </ListGroup.Item>
                       <ProductItemForm
                         type='edit'
+                        productId={products._id}
                         itemId={item._id}
                         clickedBy={showEditForm.clickedBy}
                         title={item.title}
