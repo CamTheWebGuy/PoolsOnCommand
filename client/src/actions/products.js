@@ -3,13 +3,7 @@ import { setAlert } from './alert';
 import { GET_PRODUCTS } from './types';
 
 // Update Product
-export const updateProduct = (
-  id,
-  name,
-  price,
-  category,
-  content
-) => async dispatch => {
+export const updateProduct = (id, name, price, category) => async dispatch => {
   console.log('made it here');
   try {
     const config = {
@@ -20,9 +14,9 @@ export const updateProduct = (
       }
     };
 
-    const body = JSON.stringify({ name, price, category, content });
+    const body = JSON.stringify({ name, price, category });
 
-    await axios.post(`/api/product/${id}`, body, config);
+    await axios.patch(`/api/product/${id}`, body, config);
 
     dispatch(setAlert('Product Updated', 'success'));
   } catch (err) {
