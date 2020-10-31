@@ -54,4 +54,4 @@ Makes use of Bootstrap 4
 **Admin Panel**\
 ![Admin Panel](https://i.imgur.com/4yBCYFg.jpg)\
 **Edit Product Page**\
-![Members Area](https://i.imgur.com/Rrkvj6j.jpg)\
+![Members Area](https://i.imgur.com/Rrkvj6j.jpg)
