@@ -1,4 +1,4 @@
-# PoolsOnCommand
+# Pools On Command
 A Membership Website for selling eBooks &amp; Digital Products\
 \
 Project is based off a ClickFunnels funnel from 2houragency.com. Recreating it in react for personal use as it is significantly cheaper and flexible.
