@@ -2,7 +2,7 @@
 A Membership Website for selling eBooks &amp; Digital Products\
 \
 React/Node/MongoDB/Redux Project is based off a ClickFunnels funnel from 2houragency.com. Recreating it in react for personal use as it is significantly cheaper and flexible. Plus a good learning project.
-\  
+
 
 
 Makes use of Bootstrap 4
