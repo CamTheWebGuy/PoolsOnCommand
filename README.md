@@ -42,6 +42,7 @@ Makes use of Bootstrap 4
 - [ ] Add "My Orders" page for members - Possibly with ability to cancel subscriptions if they are implemented
 - [ ] Replace Logos (Just Placeholders for now)
 - [ ] Replace Content (Just Placeholders for now)
+- [ ] Refactor Code (currently a mess)
 
 
 ## Screenshots:
