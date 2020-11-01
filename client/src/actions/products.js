@@ -2,15 +2,15 @@ import axios from 'axios';
 import { setAlert } from './alert';
 import { GET_PRODUCTS } from './types';
 
-// Update Product
-export const updateProduct = (
-  id,
-  name,
-  price,
-  category,
-  content
+// Update Product Item
+export const updateProductItem = (
+  productId,
+  itemId,
+  title,
+  content,
+  downloadOne,
+  downloadOneTitle
 ) => async dispatch => {
-  console.log('made it here');
   try {
     const config = {
       withCredentials: true,
@@ -20,13 +20,42 @@ export const updateProduct = (
       }
     };
 
-    const body = JSON.stringify({ name, price, category, content });
+    const body = JSON.stringify({
+      title,
+      content,
+      downloadOne,
+      downloadOneTitle
+    });
 
-    await axios.post(`/api/product/${id}`, body, config);
+    await axios.patch(`/api/product/item/${productId}/${itemId}`, body, config);
 
     dispatch(setAlert('Product Updated', 'success'));
   } catch (err) {
     dispatch(setAlert('Error updating product', 'danger'));
+    console.log(err);
+  }
+};
+
+// Update Product
+export const updateProduct = (id, name, price, category) => async dispatch => {
+  try {
+    const config = {
+      withCredentials: true,
+      crossDomain: true,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const body = JSON.stringify({ name, price, category });
+
+    await axios.patch(`/api/product/${id}`, body, config);
+
+    dispatch(setAlert('Product Updated', 'success'));
+  } catch (err) {
+    dispatch(
+      setAlert('Error updating product, make sure price is a number', 'danger')
+    );
     console.log(err);
   }
 };

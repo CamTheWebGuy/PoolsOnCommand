@@ -9,11 +9,106 @@ const Product = require('../../models/Product');
 const User = require('../../models/User');
 const { json } = require('express');
 
+// @route    PATCH api/product/item/:id
+// @desc     Update a Product Item by ID
+// @access   Private/Admin
+router.patch(
+  '/item/:productId/:itemId',
+  [
+    auth,
+    [
+      check('title', 'Item must have a title')
+        .not()
+        .isEmpty(),
+      check('content', 'Item must have content')
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { title, content, downloadOne, downloadOneTitle } = req.body;
+
+    const productFields = {
+      'items.$.title': title,
+      'items.$.content': content,
+      'items.$.downloadOne': downloadOne,
+      'items.$.downloadOneTitle': downloadOneTitle
+    };
+    console.log(productFields);
+
+    try {
+      let product = await Product.findOneAndUpdate(
+        { _id: req.params.productId, 'items._id': req.params.itemId },
+        { $set: productFields },
+        { new: true, upsert: true }
+      );
+      res.json(product);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route    PATCH api/product/:id
+// @desc     Update a Product
+// @access   Private/Admin
+router.patch(
+  '/:id',
+  [
+    auth,
+    [
+      check('name', 'Product name is required')
+        .not()
+        .isEmpty(),
+      check('price', 'Product price is required')
+        .not()
+        .isEmpty(),
+      check('category', 'Product category is required')
+        .not()
+        .isEmpty(),
+      check('price', 'Price must be a number').isFloat()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, image, price, category } = req.body;
+
+    const productFields = {
+      name,
+      image,
+      price,
+      category
+    };
+
+    try {
+      let product = await Product.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: productFields },
+        { new: true, upsert: true }
+      );
+      res.json(product);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
 // @route    POST api/product
-// @desc     Create or Update a Product by ID
-// @access   Private
+// @desc     Create a Product
+// @access   Private/Admin
 router.post(
-  '/:id?',
+  '/',
   [
     auth,
     [
@@ -45,18 +140,9 @@ router.post(
     };
 
     try {
-      if (!req.params.id) {
-        let product = new Product(productFields);
-        await product.save();
-        res.json(product);
-      } else {
-        let product = await Product.findOneAndUpdate(
-          { _id: req.params.id },
-          { $set: productFields },
-          { new: true, upsert: true }
-        );
-        res.json(product);
-      }
+      let product = new Product(productFields);
+      await product.save();
+      res.json(product);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');

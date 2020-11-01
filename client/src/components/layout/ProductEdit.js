@@ -5,12 +5,9 @@ import {
   Col,
   Form,
   Button,
-  Card,
-  Accordion,
-  Tab,
-  Nav,
   Spinner,
-  ListGroup
+  ListGroup,
+  InputGroup
 } from 'react-bootstrap';
 import { getOneProduct, updateProduct } from '../../actions/products';
 
@@ -19,44 +16,7 @@ import PropTypes from 'prop-types';
 
 import ReactQuill, { getContents, Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useParams } from 'react-router-dom';
-
-const editorFormats = [
-  'header',
-  'font',
-  'size',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'indent',
-  'link',
-  'image',
-  'video'
-];
-
-const editorModules = {
-  toolbar: [
-    [{ header: '1' }, { header: '2' }],
-    [{ size: [] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [
-      { list: 'ordered' },
-      { list: 'bullet' },
-      { indent: '-1' },
-      { indent: '+1' }
-    ],
-    ['link', 'image', 'video'],
-    ['clean']
-  ],
-  clipboard: {
-    // toggle to add extra line breaks when pasting HTML:
-    matchVisual: false
-  }
-};
+import ProductItemForm from './ProductItemForm';
 
 const ProductEdit = ({
   getOneProduct,
@@ -71,8 +31,12 @@ const ProductEdit = ({
     content: ''
   });
 
-  const [contentField, setContentField] = useState({
-    content: ''
+  const productItems = products.items;
+
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState({
+    show: false,
+    clickedBy: ''
   });
 
   useEffect(() => {
@@ -82,25 +46,17 @@ const ProductEdit = ({
       price: loading || !products.price ? '' : products.price,
       category: loading || !products.category ? '' : products.category
     });
-    setContentField({
-      content: loading || !products.items ? '' : products.items[0].content
-    });
   }, [loading, getOneProduct]);
 
   const { name, price, category } = formData;
-  const { content } = contentField;
 
   const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleContent = e => {
-    setContentField({ ...contentField, content: e });
-  };
-
   const onSubmit = async e => {
     e.preventDefault();
-    updateProduct(match.params.id, name, price, category, content);
+    updateProduct(match.params.id, name, price, category);
   };
 
   return products.length < 1 ? (
@@ -142,13 +98,19 @@ const ProductEdit = ({
             </Form.Group>
             <Form.Group>
               <Form.Label>Product Price</Form.Label>
-              <Form.Control
-                name='price'
-                type='text'
-                placeholder='29.99'
-                value={price}
-                onChange={e => onChange(e)}
-              />
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>$</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  name='price'
+                  type='text'
+                  pattern='[0-9, .]+'
+                  placeholder='29.99'
+                  value={price}
+                  onChange={e => onChange(e)}
+                />
+              </InputGroup>
             </Form.Group>
             <Form.Group>
               <Form.Label>Category</Form.Label>
@@ -164,49 +126,63 @@ const ProductEdit = ({
                 <option>Downsell</option>
               </Form.Control>
             </Form.Group>
+            <Button variant='primary' type='submit'>
+              Save Changes
+            </Button>
+          </Form>
+          <Form className='mgn-top-20'>
             <Form.Group>
               <h3>Items:</h3>
               <hr />
               <ListGroup>
-                <ListGroup.Item>
-                  Item #1 Name{' '}
-                  <Button variant='success' style={{ marginLeft: '10px' }}>
-                    Edit
-                  </Button>
-                  <Button style={{ marginLeft: '10px' }} variant='danger'>
-                    Delete
-                  </Button>
-                </ListGroup.Item>
+                {!loading &&
+                  productItems.map((item, index) => (
+                    <Fragment key={index}>
+                      {' '}
+                      <ListGroup.Item>
+                        {item.title}{' '}
+                        <Button
+                          variant='success'
+                          type='button'
+                          onClick={e =>
+                            setShowEditForm({
+                              show: !showEditForm.show,
+                              clickedBy: item._id
+                            })
+                          }
+                          style={{ marginLeft: '10px' }}
+                        >
+                          Edit
+                        </Button>
+                        <Button style={{ marginLeft: '10px' }} variant='danger'>
+                          Delete
+                        </Button>
+                      </ListGroup.Item>
+                      <ProductItemForm
+                        type='edit'
+                        productId={products._id}
+                        itemId={item._id}
+                        clickedBy={showEditForm.clickedBy}
+                        title={item.title}
+                        content={item.content}
+                        downloads={item.downloads}
+                        show={showEditForm.show}
+                      />
+                    </Fragment>
+                  ))}
               </ListGroup>
-              <div className='item-editor mgn-top-20'>
-                <Form.Label>Item Name</Form.Label>
-                <Form.Control type='text' placeholder='Item Name' />
-                <Form.Label className='mgn-top-20'>Item Content</Form.Label>
-                <ReactQuill
-                  theme='snow'
-                  onChange={e => handleContent(e)}
-                  value={content}
-                  modules={editorModules}
-                  formats={editorFormats}
-                />
-              </div>
-              <Button className='mgn-top-20' variant='success' type='submit'>
-                Add Item
-              </Button>
+
+              {!showEditForm.show && !showAddForm && (
+                <Button
+                  className='mgn-top-20'
+                  variant='success'
+                  type='button'
+                  onClick={e => setShowAddForm(!showAddForm)}
+                >
+                  Add Item
+                </Button>
+              )}
             </Form.Group>
-            {/* <Form.Group>
-              <ReactQuill
-                theme='snow'
-                onChange={e => handleContent(e)}
-                value={content}
-                modules={editorModules}
-                formats={editorFormats}
-              />
-            </Form.Group> */}
-            <hr />
-            <Button variant='primary' type='submit'>
-              Save Changes
-            </Button>
           </Form>
         </Col>
       </Row>
