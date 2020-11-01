@@ -165,6 +165,7 @@ const ProductEdit = ({
                         clickedBy={showEditForm.clickedBy}
                         title={item.title}
                         content={item.content}
+                        downloads={item.downloads}
                         show={showEditForm.show}
                       />
                     </Fragment>

@@ -31,12 +31,15 @@ router.patch(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { title, content } = req.body;
+    const { title, content, downloadOne, downloadOneTitle } = req.body;
 
     const productFields = {
       'items.$.title': title,
-      'items.$.content': content
+      'items.$.content': content,
+      'items.$.downloadOne': downloadOne,
+      'items.$.downloadOneTitle': downloadOneTitle
     };
+    console.log(productFields);
 
     try {
       let product = await Product.findOneAndUpdate(

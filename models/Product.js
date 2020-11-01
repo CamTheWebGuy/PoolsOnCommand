@@ -21,12 +21,10 @@ const ProductSchema = new mongoose.Schema({
     {
       title: { type: String },
       content: { type: String },
-      downloads: [
-        {
-          title: { type: String },
-          link: { type: String }
-        }
-      ]
+      downloadOne: { type: String },
+      downloadOneTitle: { type: String },
+      downloadTwo: { type: String },
+      downloadTwoTitle: { type: String }
     }
   ]
 });
