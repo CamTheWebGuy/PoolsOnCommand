@@ -9,7 +9,9 @@ export const updateProductItem = (
   title,
   content,
   downloadOne,
-  downloadOneTitle
+  downloadOneTitle,
+  downloadTwo,
+  downloadTwoTitle
 ) => async dispatch => {
   try {
     const config = {
@@ -24,7 +26,9 @@ export const updateProductItem = (
       title,
       content,
       downloadOne,
-      downloadOneTitle
+      downloadOneTitle,
+      downloadTwo,
+      downloadTwoTitle
     });
 
     await axios.patch(`/api/product/item/${productId}/${itemId}`, body, config);

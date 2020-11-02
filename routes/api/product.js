@@ -31,13 +31,22 @@ router.patch(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { title, content, downloadOne, downloadOneTitle } = req.body;
+    const {
+      title,
+      content,
+      downloadOne,
+      downloadOneTitle,
+      downloadTwo,
+      downloadTwoTitle
+    } = req.body;
 
     const productFields = {
       'items.$.title': title,
       'items.$.content': content,
       'items.$.downloadOne': downloadOne,
-      'items.$.downloadOneTitle': downloadOneTitle
+      'items.$.downloadOneTitle': downloadOneTitle,
+      'items.$.downloadTwo': downloadTwo,
+      'items.$.downloadTwoTitle': downloadTwoTitle
     };
     console.log(productFields);
 
