@@ -185,6 +185,12 @@ const ProductEdit = ({
                   Add Item
                 </Button>
               )}
+
+              <ProductItemForm
+                type='add'
+                show={showAddForm}
+                productId={products._id}
+              />
             </Form.Group>
           </Form>
         </Col>

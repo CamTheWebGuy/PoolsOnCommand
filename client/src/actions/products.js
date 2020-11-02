@@ -2,6 +2,44 @@ import axios from 'axios';
 import { setAlert } from './alert';
 import { GET_PRODUCTS } from './types';
 
+// Add New item
+export const addNewItem = (
+  productId,
+  newItemName,
+  newItemDL1,
+  newItemDL1Title,
+  newItemDL2,
+  newItemDL2Title,
+  newItemContent
+) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const body = JSON.stringify({
+      newItemName,
+      newItemDL1,
+      newItemDL1Title,
+      newItemDL2,
+      newItemDL2Title,
+      newItemContent
+    });
+
+    const product = await axios.patch(
+      `/api/product/item/${productId}/add`,
+      body,
+      config
+    );
+
+    dispatch(setAlert('Product Updated', 'success'));
+  } catch (err) {
+    dispatch(setAlert('Error adding item', 'danger'));
+    console.log(err);
+  }
+};
+
 // Update Product Item
 export const updateProductItem = (
   productId,
@@ -35,7 +73,7 @@ export const updateProductItem = (
 
     dispatch(setAlert('Product Updated', 'success'));
   } catch (err) {
-    dispatch(setAlert('Error updating product', 'danger'));
+    dispatch(setAlert('Error updating item', 'danger'));
     console.log(err);
   }
 };
@@ -102,20 +140,6 @@ export const getProducts = () => async dispatch => {
     const userOrders = await axios.get('/api/order/myorders');
 
     let itemsList = [];
-    //let products = [];
-
-    // function getOrderItems(myArray) {
-    //   myArray.forEach(item => {
-    //     let itemOrders = {};
-    //     const list = item.orderItems;
-    //     const orderId = item._id;
-    //     list.forEach(e => {
-    //       itemOrders.orderId = orderId;
-    //       itemOrders.product = e.product;
-    //       itemsList.push(itemOrders);
-    //     });
-    //   });
-    // }
 
     function getOrderItems(myArray) {
       myArray.forEach(item => {
@@ -129,15 +153,6 @@ export const getProducts = () => async dispatch => {
         });
       });
     }
-
-    // function getProductItems(productArray) {
-    //   productArray.forEach(async item => {
-    //     let productObj = {};
-    //     const userProducts = await axios.get(`/api/product/${item.product}`);
-    //     productObj = userProducts.data;
-    //     products.push(productObj);
-    //   });
-    // }
 
     const orderStuff = userOrders.data;
     getOrderItems(orderStuff);
@@ -153,13 +168,7 @@ export const getProducts = () => async dispatch => {
       finalProductsList.push(productsObj);
     });
 
-    // getProductItems(itemsList);
-    // console.log('THESE ARE THE PRODUCTS');
-    // console.log(products);
-
     const res = finalProductsList;
-    // console.log('This is payload:');
-    // console.log(res);
 
     dispatch({
       type: GET_PRODUCTS,

@@ -12,6 +12,44 @@ const { json } = require('express');
 // @route    PATCH api/product/item/:id
 // @desc     Update a Product Item by ID
 // @access   Private/Admin
+router.patch('/item/:productId/add', auth, async (req, res) => {
+  const {
+    newItemName,
+    newItemDL1,
+    newItemDL1Title,
+    newItemDL2,
+    newItemDL2Title,
+    newItemContent
+  } = req.body;
+
+  console.log(req.body);
+
+  const productFields = {
+    title: newItemName,
+    content: newItemContent,
+    downloadOne: newItemDL1,
+    downloadOneTitle: newItemDL1Title,
+    downloadTwo: newItemDL2,
+    downloadTwoTitle: newItemDL2Title
+  };
+
+  try {
+    let product = await Product.findOneAndUpdate(
+      { _id: req.params.productId },
+      { $push: { items: productFields } },
+      { new: true, upsert: true }
+    );
+
+    res.json(product.items);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route    PATCH api/product/item/:productId/:itemId
+// @desc     Update a Product Item by ID
+// @access   Private/Admin
 router.patch(
   '/item/:productId/:itemId',
   [
