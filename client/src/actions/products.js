@@ -156,6 +156,28 @@ export const updateProductItem = (
   }
 };
 
+// Add New Product
+export const addProduct = (name, price, category) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const body = JSON.stringify({
+      name,
+      price,
+      category
+    });
+
+    await axios.post('/api/product', body, config);
+  } catch (err) {
+    dispatch(setAlert('Error adding product', 'danger'));
+    console.log(err);
+  }
+};
+
 // Update Product
 export const updateProduct = (id, name, price, category) => async dispatch => {
   try {
