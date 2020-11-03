@@ -4,16 +4,32 @@ import { Modal, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { hideDeleteItemModal } from '../../actions/products';
+import {
+  hideDeleteItemModal,
+  deleteProductItem,
+  getOneProduct,
+  setLoading
+} from '../../actions/products';
 
 const DeleteConfirmModal = ({
   hideDeleteItemModal,
+  deleteProductItem,
+  getOneProduct,
+  setLoading,
   type,
   itemId,
   productId,
   clickedBy,
-  showDeleteItemModalBool: showDeleteItemModalBool
+  showDeleteItemModalBool: showDeleteItemModalBool,
+  products: { products, loading }
 }) => {
+  const onDeleteItem = async () => {
+    setLoading();
+    hideDeleteItemModal();
+    await deleteProductItem(productId, itemId);
+    await getOneProduct(productId);
+  };
+
   if (showDeleteItemModalBool && clickedBy === itemId) {
     return (
       <Modal
@@ -32,7 +48,9 @@ const DeleteConfirmModal = ({
           <Button variant='secondary' onClick={hideDeleteItemModal}>
             Cancel
           </Button>
-          <Button variant='danger'>Yes, delete the item</Button>
+          <Button variant='danger' onClick={e => onDeleteItem()}>
+            Yes, delete the item
+          </Button>
         </Modal.Footer>
       </Modal>
     );
@@ -43,13 +61,20 @@ const DeleteConfirmModal = ({
 
 DeleteConfirmModal.propTypes = {
   hideDeleteItemModal: PropTypes.func.isRequired,
-  showDeleteItemModalBool: PropTypes.bool.isRequired
+  showDeleteItemModalBool: PropTypes.bool.isRequired,
+  deleteProductItem: PropTypes.func.isRequired,
+  getOneProduct: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  showDeleteItemModalBool: state.products.showDeleteItemModalBool
+  showDeleteItemModalBool: state.products.showDeleteItemModalBool,
+  products: state.products
 });
 
 export default connect(mapStateToProps, {
-  hideDeleteItemModal
+  hideDeleteItemModal,
+  deleteProductItem,
+  getOneProduct,
+  setLoading
 })(DeleteConfirmModal);

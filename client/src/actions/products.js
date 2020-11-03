@@ -3,13 +3,20 @@ import { setAlert } from './alert';
 import {
   GET_PRODUCTS,
   SHOW_DELETE_ITEM_MODAL,
-  HIDE_DELETE_ITEM_MODAL
+  HIDE_DELETE_ITEM_MODAL,
+  SET_LOADING_TRUE
 } from './types';
 
 // Hide Delete Item Modal
 export const hideDeleteItemModal = () => async dispatch => {
   dispatch({
     type: HIDE_DELETE_ITEM_MODAL
+  });
+};
+
+export const setLoading = () => async dispatch => {
+  dispatch({
+    type: SET_LOADING_TRUE
   });
 };
 
@@ -21,12 +28,12 @@ export const showDeleteItemModal = () => async dispatch => {
 };
 
 // Delete Product
-export const deleteProduct = id => async dispatch => {
+export const deleteProductItem = (productId, itemId) => async dispatch => {
   try {
-    await axios.delete(`/api/product/${id}`);
-    dispatch(setAlert('Product Deleted', 'damger'));
+    await axios.delete(`/api/product/${productId}/${itemId}`);
+    dispatch(setAlert('Product Deleted', 'danger'));
   } catch (err) {
-    dispatch(setAlert('Error adding item', 'danger'));
+    dispatch(setAlert('Error deleting item', 'danger'));
     console.log(err);
   }
 };

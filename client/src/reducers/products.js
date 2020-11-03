@@ -3,13 +3,15 @@ import {
   CLEAR_PRODUCTS,
   GET_ALL_PRODUCTS,
   SHOW_DELETE_ITEM_MODAL,
-  HIDE_DELETE_ITEM_MODAL
+  HIDE_DELETE_ITEM_MODAL,
+  SET_LOADING_TRUE
 } from '../actions/types';
 
 const initialState = {
   loading: true,
   products: [],
   showDeleteItemModalBool: false,
+  showAddItemForm: false,
   error: {}
 };
 
@@ -40,6 +42,11 @@ export default function(state = initialState, action) {
         ...state,
         showDeleteItemModalBool: false,
         loading: false
+      };
+    case SET_LOADING_TRUE:
+      return {
+        ...state,
+        loading: true
       };
     default:
       return state;

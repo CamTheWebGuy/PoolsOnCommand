@@ -2,7 +2,12 @@ import React, { useState, Fragment } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 
-import { updateProductItem, addNewItem } from '../../actions/products';
+import {
+  updateProductItem,
+  addNewItem,
+  getOneProduct,
+  setLoading
+} from '../../actions/products';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -47,6 +52,8 @@ const editorModules = {
 const ProductItemForm = ({
   updateProductItem,
   addNewItem,
+  getOneProduct,
+  setLoading,
   type,
   productId,
   itemId,
@@ -57,7 +64,8 @@ const ProductItemForm = ({
   itemDownload1Title,
   itemDownload2,
   itemDownload2Title,
-  show
+  show,
+  products: { products, loading }
 }) => {
   const [editItemForm, setEditItemForm] = useState({
     title: title,
@@ -112,11 +120,12 @@ const ProductItemForm = ({
     );
   };
 
-  const onAddClick = e => {
+  const onAddClick = async e => {
     if (!newItemForm.newItemName || !newItemContent.content) {
       window.alert('Item Name & Content are required!');
     } else {
-      addNewItem(
+      setLoading();
+      await addNewItem(
         productId,
         newItemForm.newItemName,
         newItemForm.newItemDL1,
@@ -125,7 +134,8 @@ const ProductItemForm = ({
         newItemForm.newItemDL2Title,
         newItemContent.content
       );
-      window.location.reload();
+      await getOneProduct(productId);
+      //window.location.reload();
     }
   };
 
@@ -282,9 +292,18 @@ const ProductItemForm = ({
 
 ProductItemForm.propTypes = {
   updateProductItem: PropTypes.func.isRequired,
-  addNewItem: PropTypes.func.isRequired
+  addNewItem: PropTypes.func.isRequired,
+  getOneProduct: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired
 };
 
-export default connect(null, { updateProductItem, addNewItem })(
-  ProductItemForm
-);
+const mapStateToProps = state => ({
+  products: state.products
+});
+
+export default connect(mapStateToProps, {
+  updateProductItem,
+  addNewItem,
+  getOneProduct,
+  setLoading
+})(ProductItemForm);

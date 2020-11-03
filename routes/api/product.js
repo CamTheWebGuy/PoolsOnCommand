@@ -247,15 +247,19 @@ router.get('/', [auth, admin], async (req, res) => {
   }
 });
 
-// @route    DELETE api/product/:id
-// @desc     Delete Product by ID
+// @route    DELETE api/product/:productId/:itemId
+// @desc     Delete Product Item by ID
 // @access   Private/Admin
-// @route    PATCH api/product/:id
-// @desc     Update a Product
-// @access   Private/Admin
-router.delete('/:id', [[auth, admin]], async (req, res) => {
+router.delete('/:productId/:itemId', [[auth, admin]], async (req, res) => {
   try {
-    let product = await Product.findOneAndDelete({ _id: req.params.id });
+    console.log('made it here');
+    let product = await Product.updateOne(
+      {
+        _id: req.params.productId
+      },
+      { $pull: { items: { _id: req.params.itemId } } }
+    );
+
     res.json(product);
   } catch (err) {
     console.error(err.message);
