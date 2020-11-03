@@ -14,14 +14,14 @@ const DeleteConfirmModal = ({
   clickedBy,
   showDeleteItemModalBool: showDeleteItemModalBool
 }) => {
-  const onDeleteItemClick = e => {
-    hideDeleteItemModal();
-  };
-
   if (showDeleteItemModalBool && clickedBy === itemId) {
     return (
-      <Modal show={showDeleteItemModalBool} backdrop='static' keyboard={false}>
-        <Modal.Header closeButton onClick={e => onDeleteItemClick()}>
+      <Modal
+        show={showDeleteItemModalBool}
+        onHide={hideDeleteItemModal}
+        keyboard={false}
+      >
+        <Modal.Header closeButton onClick={hideDeleteItemModal}>
           <Modal.Title>Are You Sure?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -29,7 +29,7 @@ const DeleteConfirmModal = ({
           want to continue?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='secondary' onClick={e => onDeleteItemClick()}>
+          <Button variant='secondary' onClick={hideDeleteItemModal}>
             Cancel
           </Button>
           <Button variant='danger'>Yes, delete the item</Button>
