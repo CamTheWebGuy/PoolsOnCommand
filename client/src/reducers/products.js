@@ -6,7 +6,9 @@ import {
   HIDE_DELETE_ITEM_MODAL,
   SET_LOADING_TRUE,
   HIDE_ADD_ITEM_FORM,
-  SHOW_ADD_ITEM_FORM
+  SHOW_ADD_ITEM_FORM,
+  SHOW_DELETE_PRODUCT_MODAL,
+  HIDE_DELETE_PRODUCT_MODAL
 } from '../actions/types';
 
 const initialState = {
@@ -14,6 +16,7 @@ const initialState = {
   products: [],
   showDeleteItemModalBool: false,
   showAddItemForm: false,
+  showDeleteProductModalBool: false,
   error: {}
 };
 
@@ -60,6 +63,18 @@ export default function(state = initialState, action) {
       return {
         ...state,
         showAddItemForm: false,
+        loading: false
+      };
+    case SHOW_DELETE_PRODUCT_MODAL:
+      return {
+        ...state,
+        showDeleteProductModalBool: true,
+        loading: false
+      };
+    case HIDE_DELETE_PRODUCT_MODAL:
+      return {
+        ...state,
+        showDeleteProductModalBool: false,
         loading: false
       };
     default:

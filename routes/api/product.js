@@ -250,9 +250,8 @@ router.get('/', [auth, admin], async (req, res) => {
 // @route    DELETE api/product/:productId/:itemId
 // @desc     Delete Product Item by ID
 // @access   Private/Admin
-router.delete('/:productId/:itemId', [[auth, admin]], async (req, res) => {
+router.delete('/:productId/:itemId', [auth, admin], async (req, res) => {
   try {
-    console.log('made it here');
     let product = await Product.updateOne(
       {
         _id: req.params.productId
@@ -261,6 +260,20 @@ router.delete('/:productId/:itemId', [[auth, admin]], async (req, res) => {
     );
 
     res.json(product);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route    DELETE api/product/:productId
+// @desc     Delete Product by ID
+// @access   Private/Admin
+router.delete('/:productId', [auth, admin], async (req, res) => {
+  try {
+    await Product.findOneAndDelete({
+      _id: req.params.productId
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

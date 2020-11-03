@@ -15,7 +15,8 @@ import {
   updateProduct,
   showDeleteItemModal,
   hideDeleteItemModal,
-  showAddForm
+  showAddForm,
+  showDeleteProduct
 } from '../../actions/products';
 
 import { connect } from 'react-redux';
@@ -32,6 +33,7 @@ const ProductEdit = ({
   showDeleteItemModal,
   hideDeleteItemModal,
   showAddForm,
+  showDeleteProduct,
   showAddItemForm: showAddItemForm,
   products: { products, loading },
   match
@@ -50,6 +52,10 @@ const ProductEdit = ({
   });
 
   const [showDeleteItemModalClick, setShowDeleteItemModalClick] = useState({
+    clickedBy: ''
+  });
+
+  const [deleteProductClick, setDeleteProductClick] = useState({
     clickedBy: ''
   });
 
@@ -77,6 +83,13 @@ const ProductEdit = ({
     showDeleteItemModal();
   };
 
+  const onDeleteProductClick = e => {
+    showDeleteProduct();
+    setDeleteProductClick({
+      clickedBy: products._id
+    });
+  };
+
   return products.length < 1 ? (
     <Fragment>
       <section className='members__container'>
@@ -89,6 +102,11 @@ const ProductEdit = ({
     </Fragment>
   ) : (
     <Container>
+      <DeleteConfirmModal
+        type='product'
+        productId={products._id}
+        clickedBy={deleteProductClick.clickedBy}
+      />{' '}
       <Row>
         <Col md='12'>
           <h2 className='mgn-top-50'>
@@ -97,6 +115,7 @@ const ProductEdit = ({
               style={{ marginLeft: '15px' }}
               variant='danger'
               type='submit'
+              onClick={e => onDeleteProductClick()}
             >
               Delete Product
             </Button>
@@ -240,12 +259,15 @@ ProductEdit.propTypes = {
   showDeleteItemModal: PropTypes.func.isRequired,
   hideDeleteItemModal: PropTypes.func.isRequired,
   showAddForm: PropTypes.func.isRequired,
+  showDeleteProduct: PropTypes.func.isRequired,
   showAddItemForm: PropTypes.bool.isRequired,
+  showDeleteProductModalBool: PropTypes.bool.isRequired,
   products: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   showAddItemForm: state.products.showAddItemForm,
+  showDeleteProductModalBool: state.products.showDeleteProductModalBool,
   products: state.products
 });
 
@@ -254,5 +276,6 @@ export default connect(mapStateToProps, {
   updateProduct,
   showDeleteItemModal,
   hideDeleteItemModal,
-  showAddForm
+  showAddForm,
+  showDeleteProduct
 })(ProductEdit);

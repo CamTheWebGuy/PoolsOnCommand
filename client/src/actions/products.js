@@ -6,8 +6,24 @@ import {
   HIDE_DELETE_ITEM_MODAL,
   SET_LOADING_TRUE,
   SHOW_ADD_ITEM_FORM,
-  HIDE_ADD_ITEM_FORM
+  HIDE_ADD_ITEM_FORM,
+  SHOW_DELETE_PRODUCT_MODAL,
+  HIDE_DELETE_PRODUCT_MODAL
 } from './types';
+
+// Hide Add Item Form
+export const hideDeleteProduct = () => async dispatch => {
+  dispatch({
+    type: HIDE_DELETE_PRODUCT_MODAL
+  });
+};
+
+// Hide Add Item Form
+export const showDeleteProduct = () => async dispatch => {
+  dispatch({
+    type: SHOW_DELETE_PRODUCT_MODAL
+  });
+};
 
 // Hide Add Item Form
 export const hideAddForm = () => async dispatch => {
@@ -44,7 +60,16 @@ export const showDeleteItemModal = () => async dispatch => {
   });
 };
 
-// Delete Product
+export const deleteProduct = productId => async dispatch => {
+  try {
+    await axios.delete(`/api/product/${productId}`);
+  } catch (err) {
+    dispatch(setAlert('Error deleting product', 'danger'));
+    console.log(err);
+  }
+};
+
+// Delete Product Item
 export const deleteProductItem = (productId, itemId) => async dispatch => {
   try {
     await axios.delete(`/api/product/${productId}/${itemId}`);
