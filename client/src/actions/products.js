@@ -1,6 +1,35 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { GET_PRODUCTS } from './types';
+import {
+  GET_PRODUCTS,
+  SHOW_DELETE_ITEM_MODAL,
+  HIDE_DELETE_ITEM_MODAL
+} from './types';
+
+// Hide Delete Item Modal
+export const hideDeleteItemModal = () => async dispatch => {
+  dispatch({
+    type: HIDE_DELETE_ITEM_MODAL
+  });
+};
+
+// Show Delete Item Modal
+export const showDeleteItemModal = () => async dispatch => {
+  dispatch({
+    type: SHOW_DELETE_ITEM_MODAL
+  });
+};
+
+// Delete Product
+export const deleteProduct = id => async dispatch => {
+  try {
+    await axios.delete(`/api/product/${id}`);
+    dispatch(setAlert('Product Deleted', 'damger'));
+  } catch (err) {
+    dispatch(setAlert('Error adding item', 'danger'));
+    console.log(err);
+  }
+};
 
 // Add New item
 export const addNewItem = (

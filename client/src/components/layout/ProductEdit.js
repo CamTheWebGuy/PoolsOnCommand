@@ -7,9 +7,15 @@ import {
   Button,
   Spinner,
   ListGroup,
-  InputGroup
+  InputGroup,
+  Modal
 } from 'react-bootstrap';
-import { getOneProduct, updateProduct } from '../../actions/products';
+import {
+  getOneProduct,
+  updateProduct,
+  showDeleteItemModal,
+  hideDeleteItemModal
+} from '../../actions/products';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -17,10 +23,13 @@ import PropTypes from 'prop-types';
 import ReactQuill, { getContents, Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ProductItemForm from './ProductItemForm';
+import DeleteConfirmModal from './DeleteConfirmModal';
 
 const ProductEdit = ({
   getOneProduct,
   updateProduct,
+  showDeleteItemModal,
+  hideDeleteItemModal,
   products: { products, loading },
   match
 }) => {
@@ -36,6 +45,10 @@ const ProductEdit = ({
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState({
     show: false,
+    clickedBy: ''
+  });
+
+  const [showDeleteItemModalClick, setShowDeleteItemModalClick] = useState({
     clickedBy: ''
   });
 
@@ -57,6 +70,10 @@ const ProductEdit = ({
   const onSubmit = async e => {
     e.preventDefault();
     updateProduct(match.params.id, name, price, category);
+  };
+
+  const onDeleteItemClick = e => {
+    showDeleteItemModal();
   };
 
   return products.length < 1 ? (
@@ -138,7 +155,12 @@ const ProductEdit = ({
                 {!loading &&
                   productItems.map((item, index) => (
                     <Fragment key={index}>
-                      {' '}
+                      <DeleteConfirmModal
+                        type='item'
+                        itemId={item._id}
+                        productId={products._id}
+                        clickedBy={showDeleteItemModalClick.clickedBy}
+                      />{' '}
                       <ListGroup.Item>
                         {item.title}{' '}
                         <Button
@@ -154,7 +176,17 @@ const ProductEdit = ({
                         >
                           Edit
                         </Button>
-                        <Button style={{ marginLeft: '10px' }} variant='danger'>
+                        <Button
+                          style={{ marginLeft: '10px' }}
+                          variant='danger'
+                          type='button'
+                          onClick={e => {
+                            onDeleteItemClick(e);
+                            setShowDeleteItemModalClick({
+                              clickedBy: item._id
+                            });
+                          }}
+                        >
                           Delete
                         </Button>
                       </ListGroup.Item>
@@ -202,6 +234,8 @@ const ProductEdit = ({
 ProductEdit.propTypes = {
   getOneProduct: PropTypes.func.isRequired,
   updateProduct: PropTypes.func.isRequired,
+  showDeleteItemModal: PropTypes.func.isRequired,
+  hideDeleteItemModal: PropTypes.func.isRequired,
   products: PropTypes.object.isRequired
 };
 
@@ -209,6 +243,9 @@ const mapStateToProps = state => ({
   products: state.products
 });
 
-export default connect(mapStateToProps, { getOneProduct, updateProduct })(
-  ProductEdit
-);
+export default connect(mapStateToProps, {
+  getOneProduct,
+  updateProduct,
+  showDeleteItemModal,
+  hideDeleteItemModal
+})(ProductEdit);

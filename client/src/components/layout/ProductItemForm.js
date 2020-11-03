@@ -1,6 +1,6 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import ReactQuill, { getContents, Quill } from 'react-quill';
+import ReactQuill from 'react-quill';
 
 import { updateProductItem, addNewItem } from '../../actions/products';
 
@@ -128,8 +128,6 @@ const ProductItemForm = ({
       window.location.reload();
     }
   };
-
-  console.log('hello world!');
 
   if (type === 'edit' && show && clickedBy === itemId) {
     return (

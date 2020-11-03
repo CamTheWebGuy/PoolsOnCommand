@@ -249,6 +249,18 @@ router.get('/', [auth, admin], async (req, res) => {
 
 // @route    DELETE api/product/:id
 // @desc     Delete Product by ID
-// @access   Private
+// @access   Private/Admin
+// @route    PATCH api/product/:id
+// @desc     Update a Product
+// @access   Private/Admin
+router.delete('/:id', [[auth, admin]], async (req, res) => {
+  try {
+    let product = await Product.findOneAndDelete({ _id: req.params.id });
+    res.json(product);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;
