@@ -3,19 +3,71 @@ const request = require('request');
 const config = require('config');
 const router = express.Router();
 const auth = require('../../middleware/auth');
+const admin = require('../../middleware/admin');
 const { check, validationResult } = require('express-validator');
 
 const Product = require('../../models/Product');
 const User = require('../../models/User');
 const { json } = require('express');
 
-// @route    PATCH api/product/item/:id
+// @route    PATCH api/product/item/:productId/add
+// @desc     Add a item to a product
+// @access   Private/Admin
+router.patch(
+  '/item/:productId/add',
+  [
+    auth,
+    admin,
+    [
+      check('newItemName', 'Item must have a name')
+        .not()
+        .isEmpty(),
+      check('newItemContent', 'Item must have content')
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const {
+      newItemName,
+      newItemDL1,
+      newItemDL1Title,
+      newItemDL2,
+      newItemDL2Title,
+      newItemContent
+    } = req.body;
+
+    const productFields = {
+      title: newItemName,
+      content: newItemContent,
+      downloadOne: newItemDL1,
+      downloadOneTitle: newItemDL1Title,
+      downloadTwo: newItemDL2,
+      downloadTwoTitle: newItemDL2Title
+    };
+
+    try {
+      let product = await Product.findOneAndUpdate(
+        { _id: req.params.productId },
+        { $push: { items: productFields } },
+        { new: true, upsert: true }
+      );
+
+      res.json(product.items);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route    PATCH api/product/item/:productId/:itemId
 // @desc     Update a Product Item by ID
 // @access   Private/Admin
 router.patch(
   '/item/:productId/:itemId',
   [
-    auth,
+    [auth, admin],
     [
       check('title', 'Item must have a title')
         .not()
@@ -31,13 +83,22 @@ router.patch(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { title, content, downloadOne, downloadOneTitle } = req.body;
+    const {
+      title,
+      content,
+      downloadOne,
+      downloadOneTitle,
+      downloadTwo,
+      downloadTwoTitle
+    } = req.body;
 
     const productFields = {
       'items.$.title': title,
       'items.$.content': content,
       'items.$.downloadOne': downloadOne,
-      'items.$.downloadOneTitle': downloadOneTitle
+      'items.$.downloadOneTitle': downloadOneTitle,
+      'items.$.downloadTwo': downloadTwo,
+      'items.$.downloadTwoTitle': downloadTwoTitle
     };
     console.log(productFields);
 
@@ -61,7 +122,7 @@ router.patch(
 router.patch(
   '/:id',
   [
-    auth,
+    [auth, admin],
     [
       check('name', 'Product name is required')
         .not()
@@ -110,7 +171,7 @@ router.patch(
 router.post(
   '/',
   [
-    auth,
+    [auth, admin],
     [
       check('name', 'Product name is required')
         .not()
@@ -171,7 +232,7 @@ router.get('/:id', async (req, res) => {
 // @route    GET api/product
 // @desc     Create ALL Products
 // @access   Private/Admin
-router.get('/', auth, async (req, res) => {
+router.get('/', [auth, admin], async (req, res) => {
   try {
     const products = await Product.find({});
 
@@ -186,8 +247,24 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// @route    DELETE api/product/:id
-// @desc     Delete Product by ID
-// @access   Private
+// @route    DELETE api/product/:productId/:itemId
+// @desc     Delete Product Item by ID
+// @access   Private/Admin
+router.delete('/:productId/:itemId', [[auth, admin]], async (req, res) => {
+  try {
+    console.log('made it here');
+    let product = await Product.updateOne(
+      {
+        _id: req.params.productId
+      },
+      { $pull: { items: { _id: req.params.itemId } } }
+    );
+
+    res.json(product);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;

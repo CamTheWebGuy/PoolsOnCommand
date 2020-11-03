@@ -1,6 +1,80 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { GET_PRODUCTS } from './types';
+import {
+  GET_PRODUCTS,
+  SHOW_DELETE_ITEM_MODAL,
+  HIDE_DELETE_ITEM_MODAL,
+  SET_LOADING_TRUE
+} from './types';
+
+// Hide Delete Item Modal
+export const hideDeleteItemModal = () => async dispatch => {
+  dispatch({
+    type: HIDE_DELETE_ITEM_MODAL
+  });
+};
+
+export const setLoading = () => async dispatch => {
+  dispatch({
+    type: SET_LOADING_TRUE
+  });
+};
+
+// Show Delete Item Modal
+export const showDeleteItemModal = () => async dispatch => {
+  dispatch({
+    type: SHOW_DELETE_ITEM_MODAL
+  });
+};
+
+// Delete Product
+export const deleteProductItem = (productId, itemId) => async dispatch => {
+  try {
+    await axios.delete(`/api/product/${productId}/${itemId}`);
+    dispatch(setAlert('Product Deleted', 'danger'));
+  } catch (err) {
+    dispatch(setAlert('Error deleting item', 'danger'));
+    console.log(err);
+  }
+};
+
+// Add New item
+export const addNewItem = (
+  productId,
+  newItemName,
+  newItemDL1,
+  newItemDL1Title,
+  newItemDL2,
+  newItemDL2Title,
+  newItemContent
+) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const body = JSON.stringify({
+      newItemName,
+      newItemDL1,
+      newItemDL1Title,
+      newItemDL2,
+      newItemDL2Title,
+      newItemContent
+    });
+
+    const product = await axios.patch(
+      `/api/product/item/${productId}/add`,
+      body,
+      config
+    );
+
+    dispatch(setAlert('Product Updated', 'success'));
+  } catch (err) {
+    dispatch(setAlert('Error adding item', 'danger'));
+    console.log(err);
+  }
+};
 
 // Update Product Item
 export const updateProductItem = (
@@ -9,7 +83,9 @@ export const updateProductItem = (
   title,
   content,
   downloadOne,
-  downloadOneTitle
+  downloadOneTitle,
+  downloadTwo,
+  downloadTwoTitle
 ) => async dispatch => {
   try {
     const config = {
@@ -24,14 +100,16 @@ export const updateProductItem = (
       title,
       content,
       downloadOne,
-      downloadOneTitle
+      downloadOneTitle,
+      downloadTwo,
+      downloadTwoTitle
     });
 
     await axios.patch(`/api/product/item/${productId}/${itemId}`, body, config);
 
     dispatch(setAlert('Product Updated', 'success'));
   } catch (err) {
-    dispatch(setAlert('Error updating product', 'danger'));
+    dispatch(setAlert('Error updating item', 'danger'));
     console.log(err);
   }
 };
@@ -98,20 +176,6 @@ export const getProducts = () => async dispatch => {
     const userOrders = await axios.get('/api/order/myorders');
 
     let itemsList = [];
-    //let products = [];
-
-    // function getOrderItems(myArray) {
-    //   myArray.forEach(item => {
-    //     let itemOrders = {};
-    //     const list = item.orderItems;
-    //     const orderId = item._id;
-    //     list.forEach(e => {
-    //       itemOrders.orderId = orderId;
-    //       itemOrders.product = e.product;
-    //       itemsList.push(itemOrders);
-    //     });
-    //   });
-    // }
 
     function getOrderItems(myArray) {
       myArray.forEach(item => {
@@ -125,15 +189,6 @@ export const getProducts = () => async dispatch => {
         });
       });
     }
-
-    // function getProductItems(productArray) {
-    //   productArray.forEach(async item => {
-    //     let productObj = {};
-    //     const userProducts = await axios.get(`/api/product/${item.product}`);
-    //     productObj = userProducts.data;
-    //     products.push(productObj);
-    //   });
-    // }
 
     const orderStuff = userOrders.data;
     getOrderItems(orderStuff);
@@ -149,13 +204,7 @@ export const getProducts = () => async dispatch => {
       finalProductsList.push(productsObj);
     });
 
-    // getProductItems(itemsList);
-    // console.log('THESE ARE THE PRODUCTS');
-    // console.log(products);
-
     const res = finalProductsList;
-    // console.log('This is payload:');
-    // console.log(res);
 
     dispatch({
       type: GET_PRODUCTS,
