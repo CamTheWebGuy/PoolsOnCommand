@@ -109,8 +109,9 @@ const ProductItemForm = ({
     setNewItemContent({ ...newItemContent, content: e });
   };
 
-  const onClick = e => {
-    updateProductItem(
+  const onClick = async e => {
+    setLoading();
+    await updateProductItem(
       productId,
       itemId,
       editItemForm.title,
@@ -120,6 +121,7 @@ const ProductItemForm = ({
       editItemForm.downloadTwo,
       editItemForm.downloadTwoTitle
     );
+    await getOneProduct(productId);
   };
 
   const onAddClick = async e => {
