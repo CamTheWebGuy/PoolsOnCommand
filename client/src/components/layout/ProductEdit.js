@@ -14,7 +14,8 @@ import {
   getOneProduct,
   updateProduct,
   showDeleteItemModal,
-  hideDeleteItemModal
+  hideDeleteItemModal,
+  showAddForm
 } from '../../actions/products';
 
 import { connect } from 'react-redux';
@@ -30,6 +31,8 @@ const ProductEdit = ({
   updateProduct,
   showDeleteItemModal,
   hideDeleteItemModal,
+  showAddForm,
+  showAddItemForm: showAddItemForm,
   products: { products, loading },
   match
 }) => {
@@ -42,9 +45,7 @@ const ProductEdit = ({
 
   const productItems = products.items;
 
-  const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState({
-    show: false,
     clickedBy: ''
   });
 
@@ -207,20 +208,22 @@ const ProductEdit = ({
                   ))}
               </ListGroup>
 
-              {!showEditForm.show && !showAddForm && (
+              {showAddItemForm === false ? (
                 <Button
                   className='mgn-top-20'
                   variant='success'
                   type='button'
-                  onClick={e => setShowAddForm(!showAddForm)}
+                  onClick={showAddForm}
                 >
                   Add Item
                 </Button>
+              ) : (
+                <div></div>
               )}
 
               <ProductItemForm
                 type='add'
-                show={showAddForm}
+                show={showAddItemForm}
                 productId={products._id}
               />
             </Form.Group>
@@ -236,10 +239,13 @@ ProductEdit.propTypes = {
   updateProduct: PropTypes.func.isRequired,
   showDeleteItemModal: PropTypes.func.isRequired,
   hideDeleteItemModal: PropTypes.func.isRequired,
+  showAddForm: PropTypes.func.isRequired,
+  showAddItemForm: PropTypes.bool.isRequired,
   products: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+  showAddItemForm: state.products.showAddItemForm,
   products: state.products
 });
 
@@ -247,5 +253,6 @@ export default connect(mapStateToProps, {
   getOneProduct,
   updateProduct,
   showDeleteItemModal,
-  hideDeleteItemModal
+  hideDeleteItemModal,
+  showAddForm
 })(ProductEdit);

@@ -4,7 +4,9 @@ import {
   GET_ALL_PRODUCTS,
   SHOW_DELETE_ITEM_MODAL,
   HIDE_DELETE_ITEM_MODAL,
-  SET_LOADING_TRUE
+  SET_LOADING_TRUE,
+  HIDE_ADD_ITEM_FORM,
+  SHOW_ADD_ITEM_FORM
 } from '../actions/types';
 
 const initialState = {
@@ -47,6 +49,18 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true
+      };
+    case SHOW_ADD_ITEM_FORM:
+      return {
+        ...state,
+        showAddItemForm: true,
+        loading: false
+      };
+    case HIDE_ADD_ITEM_FORM:
+      return {
+        ...state,
+        showAddItemForm: false,
+        loading: false
       };
     default:
       return state;

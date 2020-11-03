@@ -4,8 +4,24 @@ import {
   GET_PRODUCTS,
   SHOW_DELETE_ITEM_MODAL,
   HIDE_DELETE_ITEM_MODAL,
-  SET_LOADING_TRUE
+  SET_LOADING_TRUE,
+  SHOW_ADD_ITEM_FORM,
+  HIDE_ADD_ITEM_FORM
 } from './types';
+
+// Hide Add Item Form
+export const hideAddForm = () => async dispatch => {
+  dispatch({
+    type: HIDE_ADD_ITEM_FORM
+  });
+};
+
+// Show Add Item Form
+export const showAddForm = () => async dispatch => {
+  dispatch({
+    type: SHOW_ADD_ITEM_FORM
+  });
+};
 
 // Hide Delete Item Modal
 export const hideDeleteItemModal = () => async dispatch => {
@@ -14,6 +30,7 @@ export const hideDeleteItemModal = () => async dispatch => {
   });
 };
 
+// Set loading to true
 export const setLoading = () => async dispatch => {
   dispatch({
     type: SET_LOADING_TRUE
