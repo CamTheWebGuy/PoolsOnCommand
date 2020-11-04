@@ -32,7 +32,7 @@ const editorFormats = [
 
 const editorModules = {
   toolbar: [
-    [{ header: '1' }, { header: '2' }],
+    [{ header: '1' }, { header: '2' }, { header: '3' }, { header: '4' }],
     [{ size: [] }],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
     [
@@ -77,8 +77,12 @@ const ProductItemForm = ({
     downloadTwoTitle: !itemDownload2Title ? '' : itemDownload2Title
   });
 
-  const [itemContent, setItemContent] = useState({
+  const [itemVideoContent, setItemVideoContent] = useState({
     content: content
+  });
+
+  const [itemContent, setItemContent] = useState({
+    content: ''
   });
 
   const [newItemForm, setNewItemForm] = useState({
@@ -98,7 +102,7 @@ const ProductItemForm = ({
   };
 
   const onContentChange = e => {
-    setItemContent({ ...itemContent, content: e });
+    setItemVideoContent({ ...itemVideoContent, content: e });
   };
 
   const onNewItemChange = e => {
@@ -115,7 +119,7 @@ const ProductItemForm = ({
       productId,
       itemId,
       editItemForm.title,
-      itemContent.content,
+      itemVideoContent.content,
       editItemForm.downloadOne,
       editItemForm.downloadOneTitle,
       editItemForm.downloadTwo,
@@ -155,13 +159,21 @@ const ProductItemForm = ({
           name='title'
           onChange={e => onChange(e)}
         />
+        <Form.Label className='mgn-top-20'>Item Video Content</Form.Label>
+        <ReactQuill
+          theme='snow'
+          value={itemVideoContent.content}
+          modules={editorModules}
+          formats={editorFormats}
+          onChange={e => onContentChange(e)}
+        />
+
         <Form.Label className='mgn-top-20'>Item Content</Form.Label>
         <ReactQuill
           theme='snow'
           value={itemContent.content}
           modules={editorModules}
           formats={editorFormats}
-          onChange={e => onContentChange(e)}
         />
 
         <Form.Label>Download Link #1 Title:</Form.Label>
