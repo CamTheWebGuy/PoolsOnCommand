@@ -34,12 +34,14 @@ router.patch(
       newItemDL1Title,
       newItemDL2,
       newItemDL2Title,
-      newItemContent
+      newItemContent,
+      newItemVideoContent
     } = req.body;
 
     const productFields = {
       title: newItemName,
       content: newItemContent,
+      videoContent: newItemVideoContent,
       downloadOne: newItemDL1,
       downloadOneTitle: newItemDL1Title,
       downloadTwo: newItemDL2,
