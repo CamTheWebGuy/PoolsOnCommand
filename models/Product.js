@@ -20,6 +20,7 @@ const ProductSchema = new mongoose.Schema({
   items: [
     {
       title: { type: String },
+      videoContent: { type: String },
       content: { type: String },
       downloadOne: { type: String },
       downloadOneTitle: { type: String },

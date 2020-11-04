@@ -123,6 +123,7 @@ export const updateProductItem = (
   productId,
   itemId,
   title,
+  videoContent,
   content,
   downloadOne,
   downloadOneTitle,
@@ -140,6 +141,7 @@ export const updateProductItem = (
 
     const body = JSON.stringify({
       title,
+      videoContent,
       content,
       downloadOne,
       downloadOneTitle,

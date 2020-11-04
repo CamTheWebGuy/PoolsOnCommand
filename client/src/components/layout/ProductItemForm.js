@@ -61,6 +61,7 @@ const ProductItemForm = ({
   itemId,
   clickedBy,
   title,
+  videoContent,
   content,
   itemDownload1,
   itemDownload1Title,
@@ -78,11 +79,11 @@ const ProductItemForm = ({
   });
 
   const [itemVideoContent, setItemVideoContent] = useState({
-    content: content
+    content: videoContent
   });
 
   const [itemContent, setItemContent] = useState({
-    content: ''
+    content: content
   });
 
   const [newItemForm, setNewItemForm] = useState({
@@ -101,8 +102,12 @@ const ProductItemForm = ({
     setEditItemForm({ ...editItemForm, [e.target.name]: e.target.value });
   };
 
-  const onContentChange = e => {
+  const onVideoContentChange = e => {
     setItemVideoContent({ ...itemVideoContent, content: e });
+  };
+
+  const onContentChange = e => {
+    setItemContent({ ...itemContent, content: e });
   };
 
   const onNewItemChange = e => {
@@ -120,6 +125,7 @@ const ProductItemForm = ({
       itemId,
       editItemForm.title,
       itemVideoContent.content,
+      itemContent.content,
       editItemForm.downloadOne,
       editItemForm.downloadOneTitle,
       editItemForm.downloadTwo,
@@ -165,7 +171,7 @@ const ProductItemForm = ({
           value={itemVideoContent.content}
           modules={editorModules}
           formats={editorFormats}
-          onChange={e => onContentChange(e)}
+          onChange={e => onVideoContentChange(e)}
         />
 
         <Form.Label className='mgn-top-20'>Item Content</Form.Label>
@@ -174,6 +180,7 @@ const ProductItemForm = ({
           value={itemContent.content}
           modules={editorModules}
           formats={editorFormats}
+          onChange={e => onContentChange(e)}
         />
 
         <Form.Label>Download Link #1 Title:</Form.Label>
@@ -242,6 +249,15 @@ const ProductItemForm = ({
             name='newItemName'
             onChange={e => onNewItemChange(e)}
           />
+          <Form.Label className='mgn-top-20'>Item Video Content</Form.Label>
+          <ReactQuill
+            required
+            theme='snow'
+            modules={editorModules}
+            formats={editorFormats}
+            onChange={e => onNewItemContentChange(e)}
+          />
+
           <Form.Label className='mgn-top-20'>Item Content</Form.Label>
           <ReactQuill
             required

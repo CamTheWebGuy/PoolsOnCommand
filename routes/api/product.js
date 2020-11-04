@@ -85,6 +85,7 @@ router.patch(
 
     const {
       title,
+      videoContent,
       content,
       downloadOne,
       downloadOneTitle,
@@ -94,6 +95,7 @@ router.patch(
 
     const productFields = {
       'items.$.title': title,
+      'items.$.videoContent': videoContent,
       'items.$.content': content,
       'items.$.downloadOne': downloadOne,
       'items.$.downloadOneTitle': downloadOneTitle,
