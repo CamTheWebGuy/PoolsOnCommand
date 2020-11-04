@@ -64,6 +64,7 @@ const MembersArea = ({ getProducts, products: { products, loading } }) => {
                               {innerItem.title}
                             </h3>
                             <div className='members__divider mgn-top-20'></div>
+                            {innerItem.content}
                           </section>
                         </Tab.Pane>
                       ))
