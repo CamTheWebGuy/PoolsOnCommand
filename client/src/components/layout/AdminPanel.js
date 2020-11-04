@@ -14,16 +14,39 @@ import {
   Spinner,
   Table
 } from 'react-bootstrap';
-import { getAllProducts } from '../../actions/products';
+import { getAllProducts, addProduct, setLoading } from '../../actions/products';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-const AdminPanel = ({ getAllProducts, products: { products, loading } }) => {
+const AdminPanel = ({
+  getAllProducts,
+  addProduct,
+  setLoading,
+  products: { products, loading }
+}) => {
   useEffect(() => {
     getAllProducts();
   }, [getAllProducts]);
-  const [productContent, setProductContent] = useState('');
+  const [productFormData, setProductFormData] = useState({
+    name: '',
+    price: '',
+    category: 'Main Product'
+  });
+
+  const onChange = e => {
+    setProductFormData({ ...productFormData, [e.target.name]: e.target.value });
+  };
+
+  const onClick = async e => {
+    setLoading();
+    await addProduct(
+      productFormData.name,
+      productFormData.price,
+      productFormData.category
+    );
+    getAllProducts();
+  };
 
   const editorFormats = [
     'header',
@@ -118,49 +141,59 @@ const AdminPanel = ({ getAllProducts, products: { products, loading } }) => {
             <Form>
               <Form.Group>
                 <Form.Label>Product Name</Form.Label>
-                <Form.Control type='text' placeholder='Product Name' />
+                <Form.Control
+                  type='text'
+                  name='name'
+                  placeholder='Product Name'
+                  onChange={e => onChange(e)}
+                />
               </Form.Group>
               <Form.Group>
                 <Form.Label>Product Price</Form.Label>
-                <Form.Control type='text' placeholder='29.99' />
+                <Form.Control
+                  type='text'
+                  name='price'
+                  placeholder='29.99'
+                  onChange={e => onChange(e)}
+                />
               </Form.Group>
               <Form.Group>
                 <Form.Label>Category</Form.Label>
-                <Form.Control as='select'>
+                <Form.Control
+                  as='select'
+                  name='category'
+                  onChange={e => onChange(e)}
+                >
                   <option>Main Product</option>
                   <option>Bump</option>
                   <option>Upsell</option>
                   <option>Downsell</option>
                 </Form.Control>
               </Form.Group>
-              {/* <Form.Group>
-                <ReactQuill
-                  theme='snow'
-                  value={productContent}
-                  onChange={setProductContent}
-                  modules={editorModules}
-                  formats={editorFormats}
-                />
-              </Form.Group> */}
-              <Button variant='primary' type='submit'>
+              <Button variant='primary' type='button' onClick={e => onClick(e)}>
                 Save Product
               </Button>
             </Form>
           </Col>
         </Row>
       </div>
-      {productContent}
     </Container>
   );
 };
 
 AdminPanel.propTypes = {
   getAllProducts: PropTypes.func.isRequired,
-  products: PropTypes.object.isRequired
+  products: PropTypes.object.isRequired,
+  addProduct: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   products: state.products
 });
 
-export default connect(mapStateToProps, { getAllProducts })(AdminPanel);
+export default connect(mapStateToProps, {
+  getAllProducts,
+  addProduct,
+  setLoading
+})(AdminPanel);

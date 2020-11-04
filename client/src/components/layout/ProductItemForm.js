@@ -6,7 +6,8 @@ import {
   updateProductItem,
   addNewItem,
   getOneProduct,
-  setLoading
+  setLoading,
+  hideAddForm
 } from '../../actions/products';
 
 import { connect } from 'react-redux';
@@ -31,7 +32,7 @@ const editorFormats = [
 
 const editorModules = {
   toolbar: [
-    [{ header: '1' }, { header: '2' }],
+    [{ header: '1' }, { header: '2' }, { header: '3' }, { header: '4' }],
     [{ size: [] }],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
     [
@@ -54,11 +55,13 @@ const ProductItemForm = ({
   addNewItem,
   getOneProduct,
   setLoading,
+  hideAddForm,
   type,
   productId,
   itemId,
   clickedBy,
   title,
+  videoContent,
   content,
   itemDownload1,
   itemDownload1Title,
@@ -73,6 +76,10 @@ const ProductItemForm = ({
     downloadOneTitle: !itemDownload1Title ? '' : itemDownload1Title,
     downloadTwo: !itemDownload2 ? '' : itemDownload2,
     downloadTwoTitle: !itemDownload2Title ? '' : itemDownload2Title
+  });
+
+  const [itemVideoContent, setItemVideoContent] = useState({
+    content: videoContent
   });
 
   const [itemContent, setItemContent] = useState({
@@ -95,6 +102,10 @@ const ProductItemForm = ({
     setEditItemForm({ ...editItemForm, [e.target.name]: e.target.value });
   };
 
+  const onVideoContentChange = e => {
+    setItemVideoContent({ ...itemVideoContent, content: e });
+  };
+
   const onContentChange = e => {
     setItemContent({ ...itemContent, content: e });
   };
@@ -107,17 +118,20 @@ const ProductItemForm = ({
     setNewItemContent({ ...newItemContent, content: e });
   };
 
-  const onClick = e => {
-    updateProductItem(
+  const onClick = async e => {
+    setLoading();
+    await updateProductItem(
       productId,
       itemId,
       editItemForm.title,
+      itemVideoContent.content,
       itemContent.content,
       editItemForm.downloadOne,
       editItemForm.downloadOneTitle,
       editItemForm.downloadTwo,
       editItemForm.downloadTwoTitle
     );
+    await getOneProduct(productId);
   };
 
   const onAddClick = async e => {
@@ -135,6 +149,7 @@ const ProductItemForm = ({
         newItemContent.content
       );
       await getOneProduct(productId);
+      await hideAddForm();
       //window.location.reload();
     }
   };
@@ -150,6 +165,15 @@ const ProductItemForm = ({
           name='title'
           onChange={e => onChange(e)}
         />
+        <Form.Label className='mgn-top-20'>Item Video Content</Form.Label>
+        <ReactQuill
+          theme='snow'
+          value={itemVideoContent.content}
+          modules={editorModules}
+          formats={editorFormats}
+          onChange={e => onVideoContentChange(e)}
+        />
+
         <Form.Label className='mgn-top-20'>Item Content</Form.Label>
         <ReactQuill
           theme='snow'
@@ -223,14 +247,21 @@ const ProductItemForm = ({
             type='text'
             placeholder='Item Name'
             name='newItemName'
-            value={newItemForm.newItemName}
             onChange={e => onNewItemChange(e)}
           />
+          <Form.Label className='mgn-top-20'>Item Video Content</Form.Label>
+          <ReactQuill
+            required
+            theme='snow'
+            modules={editorModules}
+            formats={editorFormats}
+            onChange={e => onNewItemContentChange(e)}
+          />
+
           <Form.Label className='mgn-top-20'>Item Content</Form.Label>
           <ReactQuill
             required
             theme='snow'
-            value={newItemContent.content}
             modules={editorModules}
             formats={editorFormats}
             onChange={e => onNewItemContentChange(e)}
@@ -242,7 +273,6 @@ const ProductItemForm = ({
             name='newItemDL1Title'
             type='text'
             placeholder='Graphic Template'
-            value={newItemForm.newItemDl1Title}
             onChange={e => onNewItemChange(e)}
           />
           <Form.Label>Download Link #1:</Form.Label>
@@ -250,7 +280,6 @@ const ProductItemForm = ({
           <Form.Control
             name='newItemDL1'
             type='text'
-            value={newItemForm.newItemDL1}
             onChange={e => onNewItemChange(e)}
             placeholder='https://example.com/download'
           />
@@ -260,7 +289,6 @@ const ProductItemForm = ({
           <Form.Control
             name='newItemDL2Title'
             type='text'
-            value={newItemForm.newItemDl2Title}
             onChange={e => onNewItemChange(e)}
             placeholder='Graphic Template'
           />
@@ -270,7 +298,6 @@ const ProductItemForm = ({
           <Form.Control
             name='newItemDL2'
             type='text'
-            value={newItemForm.newItemDL2}
             onChange={e => onNewItemChange(e)}
             placeholder='https://example.com/download2'
           />
@@ -294,10 +321,13 @@ ProductItemForm.propTypes = {
   updateProductItem: PropTypes.func.isRequired,
   addNewItem: PropTypes.func.isRequired,
   getOneProduct: PropTypes.func.isRequired,
-  setLoading: PropTypes.func.isRequired
+  setLoading: PropTypes.func.isRequired,
+  showAddItemForm: PropTypes.bool.isRequired,
+  hideAddForm: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
+  showAddItemForm: state.products.showAddItemForm,
   products: state.products
 });
 
@@ -305,5 +335,6 @@ export default connect(mapStateToProps, {
   updateProductItem,
   addNewItem,
   getOneProduct,
-  setLoading
+  setLoading,
+  hideAddForm
 })(ProductItemForm);

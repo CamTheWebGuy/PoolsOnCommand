@@ -4,8 +4,40 @@ import {
   GET_PRODUCTS,
   SHOW_DELETE_ITEM_MODAL,
   HIDE_DELETE_ITEM_MODAL,
-  SET_LOADING_TRUE
+  SET_LOADING_TRUE,
+  SHOW_ADD_ITEM_FORM,
+  HIDE_ADD_ITEM_FORM,
+  SHOW_DELETE_PRODUCT_MODAL,
+  HIDE_DELETE_PRODUCT_MODAL
 } from './types';
+
+// Hide Add Item Form
+export const hideDeleteProduct = () => async dispatch => {
+  dispatch({
+    type: HIDE_DELETE_PRODUCT_MODAL
+  });
+};
+
+// Hide Add Item Form
+export const showDeleteProduct = () => async dispatch => {
+  dispatch({
+    type: SHOW_DELETE_PRODUCT_MODAL
+  });
+};
+
+// Hide Add Item Form
+export const hideAddForm = () => async dispatch => {
+  dispatch({
+    type: HIDE_ADD_ITEM_FORM
+  });
+};
+
+// Show Add Item Form
+export const showAddForm = () => async dispatch => {
+  dispatch({
+    type: SHOW_ADD_ITEM_FORM
+  });
+};
 
 // Hide Delete Item Modal
 export const hideDeleteItemModal = () => async dispatch => {
@@ -14,6 +46,7 @@ export const hideDeleteItemModal = () => async dispatch => {
   });
 };
 
+// Set loading to true
 export const setLoading = () => async dispatch => {
   dispatch({
     type: SET_LOADING_TRUE
@@ -27,7 +60,16 @@ export const showDeleteItemModal = () => async dispatch => {
   });
 };
 
-// Delete Product
+export const deleteProduct = productId => async dispatch => {
+  try {
+    await axios.delete(`/api/product/${productId}`);
+  } catch (err) {
+    dispatch(setAlert('Error deleting product', 'danger'));
+    console.log(err);
+  }
+};
+
+// Delete Product Item
 export const deleteProductItem = (productId, itemId) => async dispatch => {
   try {
     await axios.delete(`/api/product/${productId}/${itemId}`);
@@ -81,6 +123,7 @@ export const updateProductItem = (
   productId,
   itemId,
   title,
+  videoContent,
   content,
   downloadOne,
   downloadOneTitle,
@@ -98,6 +141,7 @@ export const updateProductItem = (
 
     const body = JSON.stringify({
       title,
+      videoContent,
       content,
       downloadOne,
       downloadOneTitle,
@@ -110,6 +154,28 @@ export const updateProductItem = (
     dispatch(setAlert('Product Updated', 'success'));
   } catch (err) {
     dispatch(setAlert('Error updating item', 'danger'));
+    console.log(err);
+  }
+};
+
+// Add New Product
+export const addProduct = (name, price, category) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const body = JSON.stringify({
+      name,
+      price,
+      category
+    });
+
+    await axios.post('/api/product', body, config);
+  } catch (err) {
+    dispatch(setAlert('Error adding product', 'danger'));
     console.log(err);
   }
 };
