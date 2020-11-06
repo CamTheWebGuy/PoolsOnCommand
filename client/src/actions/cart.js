@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { ADD_PRODUCT_CART, REMOVE_PRODUCT_CART, CLEAR_CART } from './types';
+import {
+  ADD_PRODUCT_CART,
+  REMOVE_PRODUCT_CART,
+  CLEAR_CART,
+  SET_CLIENT_SECRET,
+  CLEAR_CLIENT_SECRET
+} from './types';
 
 // Add Item to Cart
 export const addItemToCart = productId => async dispatch => {
@@ -53,6 +59,11 @@ export const createPaymentIntent = items => async dispatch => {
       items,
       config
     );
+
+    dispatch({
+      type: SET_CLIENT_SECRET,
+      payload: paymentIntent.data.clientSecret
+    });
   } catch (err) {
     dispatch(setAlert('Error removing item from cart', 'danger'));
   }

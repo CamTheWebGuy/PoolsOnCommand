@@ -1,12 +1,15 @@
 import {
   ADD_PRODUCT_CART,
   REMOVE_PRODUCT_CART,
-  CLEAR_CART
+  CLEAR_CART,
+  SET_CLIENT_SECRET,
+  CLEAR_CLIENT_SECRET
 } from '../actions/types';
 
 const initialState = {
   cartItems: [],
   cartTotal: '0.00',
+  clientSecret: '',
   loading: true
 };
 
@@ -29,6 +32,18 @@ export default function(state = initialState, action) {
       return {
         ...state,
         cartItems: []
+      };
+    case SET_CLIENT_SECRET:
+      return {
+        ...state,
+        clientSecret: payload,
+        loading: false
+      };
+    case CLEAR_CLIENT_SECRET:
+      return {
+        ...state,
+        clientSecret: '',
+        loading: false
       };
     default:
       return state;

@@ -8,34 +8,28 @@ import PropTypes from 'prop-types';
 import { clearCart, createPaymentIntent } from '../../actions/cart';
 
 const CheckoutForm = ({
+  cartItems,
   clearCart,
   createPaymentIntent,
-  cartItems: cartItems
+  clientSecret: clientSecret
 }) => {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [clientSecret, setClientSecret] = useState('');
+  const [clientSecretCode, setClientSecretCode] = useState('');
   const stripe = useStripe();
   const elements = useElements();
-  useEffect(async () => {
-    console.log('HELLO WORLD');
-    // Create PaymentIntent as soon as the page loads
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-    const body = cartItems;
-    const paymentIntent = await axios.post(
-      '/api/stripe/create-payment-intent',
-      body,
-      config
-    );
+  useEffect(() => {
+    createPaymentIntent(cartItems);
+  }, [createPaymentIntent]);
 
-    setClientSecret(paymentIntent.data.clientSecret);
-  }, []);
+  useEffect(() => {
+    if (clientSecret) {
+      setClientSecretCode(clientSecret);
+    }
+  }, [clientSecret]);
+
   const cardStyle = {
     style: {
       base: {
@@ -62,7 +56,7 @@ const CheckoutForm = ({
   const handleSubmit = async ev => {
     ev.preventDefault();
     setProcessing(true);
-    const payload = await stripe.confirmCardPayment(clientSecret, {
+    const payload = await stripe.confirmCardPayment(clientSecretCode, {
       payment_method: {
         card: elements.getElement(CardElement)
       }
@@ -76,6 +70,7 @@ const CheckoutForm = ({
       setSucceeded(true);
     }
   };
+
   return (
     <form id='payment-form' onSubmit={handleSubmit}>
       <CardElement
@@ -108,12 +103,11 @@ const CheckoutForm = ({
 };
 
 const mapStateToProps = state => ({
-  cartItems: state.cart.cartItems
+  clientSecret: state.cart.clientSecret
 });
 
 CheckoutForm.propTypes = {
   clearCart: PropTypes.func.isRequired,
-  cartItems: PropTypes.array.isRequired,
   createPaymentIntent: PropTypes.func.isRequired
 };
 

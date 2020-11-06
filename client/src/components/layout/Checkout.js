@@ -19,6 +19,7 @@ const Checkout = ({
   removeItemCart,
   clearCart,
   createPaymentIntent,
+  loading: loading,
   cartItems: cartItems
 }) => {
   const bookId = '5fa30db8df2b6949a1d3b417';
@@ -208,9 +209,12 @@ const Checkout = ({
                 how..? This video training is only $17 today.
               </p>
             </div>
-            <Elements stripe={promise}>
-              <CheckoutForm />
-            </Elements>
+            {!loading && cartItems.length >= 2 && (
+              <Elements stripe={promise}>
+                <CheckoutForm cartItems={cartItems} />
+              </Elements>
+            )}
+
             <Button
               variant='primary'
               size='lg'
@@ -238,7 +242,8 @@ Checkout.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  cartItems: state.cart.cartItems
+  cartItems: state.cart.cartItems,
+  loading: state.cart.loading
 });
 
 export default connect(mapStateToProps, {
