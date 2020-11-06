@@ -7,6 +7,7 @@ import Login from './components/layout/Login';
 import MembersArea from './components/layout/MembersArea';
 import AdminPanel from './components/layout/AdminPanel';
 import ProductEdit from './components/layout/ProductEdit';
+import Checkout from './components/layout/Checkout';
 
 import Alert from './components/layout/Alert';
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -36,7 +37,8 @@ function App() {
           <Alert />
           <Switch>
             <Route exact path='/' component={Landing} />
-            <Route exact path='/members-login' component={Login} />
+            <Route exact path='/checkout' component={Checkout} />
+            \<Route exact path='/members-login' component={Login} />
             <PrivateRoute exact path='/members-area' component={MembersArea} />
             <PrivateRoute exact path='/admin-panel' component={AdminPanel} />
             <PrivateRoute exact path='/product/:id' component={ProductEdit} />

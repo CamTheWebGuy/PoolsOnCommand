@@ -7,17 +7,10 @@ import {
   Col,
   Form,
   Button,
-  Card,
-  Accordion,
-  Tab,
-  Nav,
   Spinner,
   Table
 } from 'react-bootstrap';
 import { getAllProducts, addProduct, setLoading } from '../../actions/products';
-
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 
 const AdminPanel = ({
   getAllProducts,
@@ -46,43 +39,6 @@ const AdminPanel = ({
       productFormData.category
     );
     getAllProducts();
-  };
-
-  const editorFormats = [
-    'header',
-    'font',
-    'size',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'indent',
-    'link',
-    'image',
-    'video'
-  ];
-
-  const editorModules = {
-    toolbar: [
-      [{ header: '1' }, { header: '2' }],
-      [{ size: [] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [
-        { list: 'ordered' },
-        { list: 'bullet' },
-        { indent: '-1' },
-        { indent: '+1' }
-      ],
-      ['link', 'image', 'video'],
-      ['clean']
-    ],
-    clipboard: {
-      // toggle to add extra line breaks when pasting HTML:
-      matchVisual: false
-    }
   };
 
   return products.length < 1 ? (

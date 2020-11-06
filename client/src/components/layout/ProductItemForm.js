@@ -143,8 +143,8 @@ const ProductItemForm = ({
   };
 
   const onAddClick = async e => {
-    if (!newItemForm.newItemName || !newItemContent.content) {
-      window.alert('Item Name & Content are required!');
+    if (!newItemForm.newItemName) {
+      window.alert('Item Name required!');
     } else {
       setLoading();
       await addNewItem(
@@ -241,7 +241,7 @@ const ProductItemForm = ({
         </Button>
       </div>
     );
-  } else if (!show || clickedBy != itemId) {
+  } else if (!show || clickedBy !== itemId) {
     return <div></div>;
   }
 
@@ -321,7 +321,7 @@ const ProductItemForm = ({
         </div>
       </Fragment>
     );
-  } else if (!show || clickedBy != itemId) {
+  } else if (!show || clickedBy !== itemId) {
     return <div></div>;
   }
 };

@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import alert from './alert';
 import auth from './auth';
+import cart from './cart';
 import products from './products';
 // import profile from './profile';
 // import post from './post';
@@ -8,5 +9,6 @@ import products from './products';
 export default combineReducers({
   auth,
   alert,
-  products
+  products,
+  cart
 });
