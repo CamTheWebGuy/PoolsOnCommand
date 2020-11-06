@@ -18,8 +18,8 @@ Makes use of Bootstrap 4
 - [x] Get All Orders (for admins only)
 - [x] Mark Order as Paid (may not keep this long term, just an idea)
 - [x] Add Delete/Edit Product Item(s) Functionality
+- [x] Add Delete Product Functionality
 - [ ] Double check admin restrictions for routes - (the check is implemented but I didnt add it to all the proper routes yet)
-- [ ] Add Delete Product Functionality
 - [ ] Implement Payment System (Likely PayPal, may include subscriptions as well)
 - [ ] Implement System to Track Sales Numbers
 - [ ] Add Sanitization to User Input Received
@@ -33,8 +33,8 @@ Makes use of Bootstrap 4
 - [x] Implemented Quill.js for editing product content
 - [x] Add Edit Product Functionality
 - [x] Add Edit/Delete Product Items Functionality
-- [ ] Add Create New Product Page
-- [ ] Finish Members Area Functionality
+- [x] Add Create New Product Page
+- [x] Finish Members Area Functionality
 - [ ] Implement Payment System
 - [ ] Add functionality to payment form on landing page
 - [ ] Add Upsell/Downsell Pages
