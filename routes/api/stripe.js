@@ -6,45 +6,43 @@ const stripe = require('stripe')(config.get('stripeSecretkey'));
 
 const Product = require('../../models/Product');
 
-let total = '';
-let finalTotal = [];
-
 const calculateOrderAmount = items => {
-  //console.log(items);
+  let total = '';
+  let finalTotal = [];
 
-  if (items.length < 2) {
-    total = +items.price;
-    console.log('items here');
-    console.log(items);
-  } else {
-    items.forEach(e => {
-      console.log('more than 2 items');
-      total = +total + +e.price;
-    });
-  }
+  items.forEach(e => {
+    total = +total + +e.price;
+  });
 
   total = Math.round(total * 100 + Number.EPSILON) / 100;
+  total = parseFloat(total).toFixed(2);
   total = total.toString();
-  console.log(total);
 
   finalTotal = total.split('.');
   //return Math.round(total * 100 + Number.EPSILON) / 100;
   return finalTotal.join('');
 };
 
-// @route    POST api/stripe/create-payment-intent
-// @desc     Create Payment Intent
+// @route    POST api/stripe/charge
+// @desc     Charge a card
 // @access   Public
-router.post('/create-payment-intent', async (req, res) => {
-  const items = req.body;
-  console.log('PAYMENT INTENT HAS BEEN HIT');
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(items),
-    currency: 'usd'
-  });
-  res.send({
-    clientSecret: paymentIntent.client_secret
-  });
+router.post('/charge', async (req, res) => {
+  const { id, cartItems } = req.body;
+
+  try {
+    const payment = await stripe.paymentIntents.create({
+      amount: calculateOrderAmount(cartItems),
+      currency: 'USD',
+      description: 'Pools On Command',
+      payment_method: id,
+      confirm: true
+    });
+    //console.log(payment);
+
+    return res.status(200).json({ confirm: 'success' });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 module.exports = router;

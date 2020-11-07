@@ -11,7 +11,8 @@ import {
   addItemToCart,
   removeItemCart,
   clearCart,
-  createPaymentIntent
+  createPaymentIntent,
+  updatePaymentIntent
 } from '../../actions/cart';
 
 const Checkout = ({
@@ -19,9 +20,13 @@ const Checkout = ({
   removeItemCart,
   clearCart,
   createPaymentIntent,
+  updatePaymentIntent,
   loading: loading,
-  cartItems: cartItems
+  cartItems: cartItems,
+  paymentId: paymentId,
+  clientSecret: clientSecret
 }) => {
+  const [clientSecretCode, setClientSecretCode] = useState('');
   const bookId = '5fa30db8df2b6949a1d3b417';
   const audioId = '5fa474736c142c3140b9bb96';
 
@@ -31,6 +36,20 @@ const Checkout = ({
     addItemToCart(bookId);
     addItemToCart(audioId);
   }, [addItemToCart]);
+
+  // useEffect(() => {
+  //   if (cartItems.length >= 2) {
+  //     console.log('creating intent');
+  //     createPaymentIntent(cartItems);
+  //     console.log('intent created');
+  //   }
+  // }, [cartItems]);
+
+  // useEffect(() => {
+  //   if (clientSecret) {
+  //     setClientSecretCode(clientSecret);
+  //   }
+  // }, [clientSecret]);
 
   const [audioBookChecked, setAudioBookChecked] = useState(true);
   const [eBookChecked, seteBookChecked] = useState(false);
@@ -54,6 +73,7 @@ const Checkout = ({
       await clearCart();
       addItemToCart(audioId);
       addItemToCart(bookId);
+      console.log('audio checked');
     }
   };
 
@@ -65,7 +85,8 @@ const Checkout = ({
       setAudioBookChecked(false);
       seteBookChecked(true);
       await clearCart();
-      addItemToCart(bookId);
+      await addItemToCart(bookId);
+      console.log('book checked');
     }
   };
 
@@ -77,6 +98,9 @@ const Checkout = ({
     <Container>
       <Row>
         <Col md='12'>
+          <Elements stripe={promise}>
+            <CheckoutForm />
+          </Elements>
           <h2 className='text-center mgn-top-20'>Pools On Command Book</h2>
         </Col>
       </Row>
@@ -209,11 +233,6 @@ const Checkout = ({
                 how..? This video training is only $17 today.
               </p>
             </div>
-            {!loading && cartItems.length >= 2 && (
-              <Elements stripe={promise}>
-                <CheckoutForm cartItems={cartItems} />
-              </Elements>
-            )}
 
             <Button
               variant='primary'
@@ -238,17 +257,21 @@ Checkout.propTypes = {
   removeItemCart: PropTypes.func.isRequired,
   clearCart: PropTypes.func.isRequired,
   cartItems: PropTypes.array.isRequired,
-  createPaymentIntent: PropTypes.func.isRequired
+  createPaymentIntent: PropTypes.func.isRequired,
+  updatePaymentIntent: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   cartItems: state.cart.cartItems,
-  loading: state.cart.loading
+  loading: state.cart.loading,
+  paymentId: state.cart.paymentId,
+  clientSecret: state.cart.clientSecret
 });
 
 export default connect(mapStateToProps, {
   addItemToCart,
   removeItemCart,
   clearCart,
-  createPaymentIntent
+  createPaymentIntent,
+  updatePaymentIntent
 })(Checkout);

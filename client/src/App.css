@@ -1153,7 +1153,7 @@ img {
   margin-bottom: 32px;
 }
 /* Buttons and links */
-button {
+.stripe_payment button {
   background: #5469d4;
   font-family: Arial, sans-serif;
   color: #ffffff;
@@ -1168,10 +1168,10 @@ button {
   box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
   width: 100%;
 }
-button:hover {
+.stripe_payment button:hover {
   filter: contrast(115%);
 }
-button:disabled {
+.stripe_payment button:disabled {
   opacity: 0.5;
   cursor: default;
 }

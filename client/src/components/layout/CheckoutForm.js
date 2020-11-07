@@ -5,30 +5,32 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { clearCart, createPaymentIntent } from '../../actions/cart';
-
-const CheckoutForm = ({
-  cartItems,
+import {
   clearCart,
   createPaymentIntent,
-  clientSecret: clientSecret
+  updatePaymentIntent
+} from '../../actions/cart';
+
+const CheckoutForm = ({
+  clearCart,
+  createPaymentIntent,
+  updatePaymentIntent,
+  clientSecret,
+  cartItems: cartItems
 }) => {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [clientSecretCode, setClientSecretCode] = useState('');
+  // const [clientSecretCode, setClientSecretCode] = useState(clientSecret);
   const stripe = useStripe();
   const elements = useElements();
-  useEffect(() => {
-    createPaymentIntent(cartItems);
-  }, [createPaymentIntent]);
 
-  useEffect(() => {
-    if (clientSecret) {
-      setClientSecretCode(clientSecret);
-    }
-  }, [clientSecret]);
+  // useEffect(() => {
+  //   if (clientSecret) {
+  //     setClientSecretCode(clientSecret);
+  //   }
+  // }, [clientSecret]);
 
   const cardStyle = {
     style: {
@@ -50,39 +52,75 @@ const CheckoutForm = ({
   const handleChange = async event => {
     // Listen for changes in the CardElement
     // and display any errors as the customer types their card details
+
     setDisabled(event.empty);
     setError(event.error ? event.error.message : '');
   };
+
   const handleSubmit = async ev => {
     ev.preventDefault();
     setProcessing(true);
-    const payload = await stripe.confirmCardPayment(clientSecretCode, {
-      payment_method: {
-        card: elements.getElement(CardElement)
-      }
+
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: elements.getElement(CardElement)
     });
-    if (payload.error) {
-      setError(`Payment failed ${payload.error.message}`);
-      setProcessing(false);
-    } else {
+
+    if (!error) {
+      const { id } = paymentMethod;
+
+      try {
+        const { data } = await axios.post('/api/stripe/charge', {
+          id,
+          cartItems
+        });
+        console.log(data);
+      } catch (err) {
+        console.error(err);
+      }
+
       setError(null);
       setProcessing(false);
       setSucceeded(true);
+    } else {
+      setError(`Payment faied ${error.message}`);
+      setProcessing(false);
     }
+
+    // const payload = await stripe.confirmCardPayment(clientSecretCode, {
+    //   payment_method: {
+    //     card: elements.getElement(CardElement)
+    //   }
+    // });
+    // if (payload.error) {
+    //   setError(`Payment failed ${payload.error.message}`);
+    //   setProcessing(false);
+    // } else {
+    //   setError(null);
+    //   setProcessing(false);
+    //   setSucceeded(true);
+    // }
   };
 
   return (
-    <form id='payment-form' onSubmit={handleSubmit}>
+    <form id='payment-form' onSubmit={handleSubmit} disabled={!stripe}>
       <CardElement
         id='card-element'
         options={cardStyle}
         onChange={handleChange}
       />
-      <button disabled={processing || disabled || succeeded} id='submit'>
-        <span id='button-text'>
-          {processing ? <div className='spinner' id='spinner'></div> : 'Pay'}
-        </span>
-      </button>
+      <div className='stripe_payment'>
+        <button disabled={processing || disabled || succeeded} id='submit'>
+          <span id='button-text'>
+            {processing ? (
+              <div className='spinner' id='spinner'></div>
+            ) : (
+              'Place Order'
+            )}
+          </span>
+        </button>
+      </div>
+
       {/* Show any error that happens when processing the payment */}
       {error && (
         <div className='card-error' role='alert'>
@@ -102,15 +140,19 @@ const CheckoutForm = ({
   );
 };
 
-const mapStateToProps = state => ({
-  clientSecret: state.cart.clientSecret
-});
-
 CheckoutForm.propTypes = {
   clearCart: PropTypes.func.isRequired,
-  createPaymentIntent: PropTypes.func.isRequired
+  createPaymentIntent: PropTypes.func.isRequired,
+  updatePaymentIntent: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, { clearCart, createPaymentIntent })(
-  CheckoutForm
-);
+const mapStateToProps = state => ({
+  paymentId: state.cart.paymentId,
+  cartItems: state.cart.cartItems
+});
+
+export default connect(mapStateToProps, {
+  clearCart,
+  createPaymentIntent,
+  updatePaymentIntent
+})(CheckoutForm);

@@ -5,7 +5,8 @@ import {
   REMOVE_PRODUCT_CART,
   CLEAR_CART,
   SET_CLIENT_SECRET,
-  CLEAR_CLIENT_SECRET
+  CLEAR_CLIENT_SECRET,
+  SET_PAYMENT_ID
 } from './types';
 
 // Add Item to Cart
@@ -56,6 +57,36 @@ export const createPaymentIntent = items => async dispatch => {
 
     const paymentIntent = await axios.post(
       '/api/stripe/create-payment-intent',
+      items,
+      config
+    );
+
+    dispatch({
+      type: SET_CLIENT_SECRET,
+      payload: paymentIntent.data.clientSecret
+    });
+
+    dispatch({
+      type: SET_PAYMENT_ID,
+      payload: paymentIntent.data.id
+    });
+
+    // Set state "PaymentId" to the id sent from backend so it can be updated later
+  } catch (err) {
+    dispatch(setAlert('Error removing item from cart', 'danger'));
+  }
+};
+
+export const updatePaymentIntent = (items, id) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const paymentIntent = await axios.post(
+      `/api/stripe/payment-intent/${id}`,
       items,
       config
     );
