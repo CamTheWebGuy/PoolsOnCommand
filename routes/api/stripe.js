@@ -6,11 +6,17 @@ const stripe = require('stripe')(config.get('stripeSecretkey'));
 
 const Product = require('../../models/Product');
 
-const calculateOrderAmount = items => {
+const calculateOrderAmount = async items => {
   let total = '';
   let finalTotal = [];
+  //let productsList = [];
 
-  items.forEach(e => {
+  let productsList = await Product.find()
+    .where('_id')
+    .in(items)
+    .exec();
+
+  productsList.forEach(e => {
     total = +total + +e.price;
   });
 
@@ -20,7 +26,8 @@ const calculateOrderAmount = items => {
 
   finalTotal = total.split('.');
   //return Math.round(total * 100 + Number.EPSILON) / 100;
-  return finalTotal.join('');
+  finalTotal = finalTotal.join('');
+  return finalTotal;
 };
 
 // @route    POST api/stripe/charge
@@ -28,10 +35,17 @@ const calculateOrderAmount = items => {
 // @access   Public
 router.post('/charge', async (req, res) => {
   const { id, cartItems } = req.body;
+  const products = [];
+
+  // Lookup items on the backend to confirm price - Prevent price manipulation on the frontend.
 
   try {
+    cartItems.forEach(e => {
+      products.push(e._id);
+    });
+    const amount = await calculateOrderAmount(products);
     const payment = await stripe.paymentIntents.create({
-      amount: calculateOrderAmount(cartItems),
+      amount,
       currency: 'USD',
       description: 'Pools On Command',
       payment_method: id,
