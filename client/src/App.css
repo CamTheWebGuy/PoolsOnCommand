@@ -305,6 +305,10 @@ img {
   font-size: 37px
 }
 
+.fsize-38 {
+  font-size: 38px
+}
+
 .fsize-46 {
   font-size: 46px;
 }
@@ -1238,3 +1242,52 @@ img {
     width: 80vw;
   }
 }
+
+.oto__header{
+  background: black;
+}
+
+.oto__logo img {
+  width: 20%;
+}
+
+.oto__step_btn {
+  background: rgb(255,255,255,0.5);
+  border-radius: 5px;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 18px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.oto__complete{
+  background: white;
+}
+
+.oto__active{
+  background: red;
+  color: white;
+}
+
+.oto__sales-letter{
+  background-color: #f2f2f2;
+}
+
+.oto__content {
+  padding: 50px;
+  margin: 40px auto 0px;
+  background-color: rgb(255, 255, 255);
+  outline: none;
+  width: 77%;
+  max-width: 100%;
+  -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+
+.oto__content p{
+  padding-top: 10px;
+}
+
+

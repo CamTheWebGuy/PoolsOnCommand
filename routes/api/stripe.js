@@ -9,7 +9,6 @@ const Product = require('../../models/Product');
 const calculateOrderAmount = async items => {
   let total = '';
   let finalTotal = [];
-  //let productsList = [];
 
   let productsList = await Product.find()
     .where('_id')
@@ -25,7 +24,6 @@ const calculateOrderAmount = async items => {
   total = total.toString();
 
   finalTotal = total.split('.');
-  //return Math.round(total * 100 + Number.EPSILON) / 100;
   finalTotal = finalTotal.join('');
   return finalTotal;
 };
@@ -36,8 +34,6 @@ const calculateOrderAmount = async items => {
 router.post('/charge', async (req, res) => {
   const { id, cartItems } = req.body;
   const products = [];
-
-  // Lookup items on the backend to confirm price - Prevent price manipulation on the frontend.
 
   try {
     cartItems.forEach(e => {

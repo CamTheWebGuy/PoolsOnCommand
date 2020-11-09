@@ -5,6 +5,8 @@ import ReactHtmlParser from 'react-html-parser';
 import { Row, Container, Col, Button, Tab, Spinner } from 'react-bootstrap';
 import { getProducts } from '../../actions/products';
 import MembersItem from './MembersItem';
+import Navbar from './Navbar';
+import Alert from './Alert';
 
 const MembersArea = ({ getProducts, products: { products, loading } }) => {
   useEffect(() => {
@@ -13,6 +15,8 @@ const MembersArea = ({ getProducts, products: { products, loading } }) => {
 
   return products.length < 1 ? (
     <Fragment>
+      <Navbar />
+      <Alert />
       <section className='members__container'>
         <Container className='pdding-top-50 text-center'>
           <Spinner animation='border' role='status'>
@@ -23,6 +27,8 @@ const MembersArea = ({ getProducts, products: { products, loading } }) => {
     </Fragment>
   ) : (
     <Fragment>
+      <Navbar />
+      <Alert />
       <section className='members__container'>
         <Container className='pdding-top-50'>
           <Tab.Container

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
@@ -86,20 +87,6 @@ const CheckoutForm = ({
       setError(`Payment faied ${error.message}`);
       setProcessing(false);
     }
-
-    // const payload = await stripe.confirmCardPayment(clientSecretCode, {
-    //   payment_method: {
-    //     card: elements.getElement(CardElement)
-    //   }
-    // });
-    // if (payload.error) {
-    //   setError(`Payment failed ${payload.error.message}`);
-    //   setProcessing(false);
-    // } else {
-    //   setError(null);
-    //   setProcessing(false);
-    //   setSucceeded(true);
-    // }
   };
 
   return (
@@ -128,6 +115,7 @@ const CheckoutForm = ({
         </div>
       )}
       {/* Show a success message upon completion */}
+      {succeeded && <Redirect to='/order-complete' />}
       <p className={succeeded ? 'result-message' : 'result-message hidden'}>
         Payment succeeded, see the result in your
         <a href={`https://dashboard.stripe.com/test/payments`}>

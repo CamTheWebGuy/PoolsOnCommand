@@ -1,11 +1,7 @@
 import {
   ADD_PRODUCT_CART,
   REMOVE_PRODUCT_CART,
-  CLEAR_CART,
-  SET_CLIENT_SECRET,
-  CLEAR_CLIENT_SECRET,
-  SET_PAYMENT_ID,
-  CLEAR_PAYMENT_ID
+  CLEAR_CART
 } from '../actions/types';
 
 const initialState = {
@@ -35,26 +31,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         cartItems: []
-      };
-    case SET_CLIENT_SECRET:
-      return {
-        ...state,
-        clientSecret: payload,
-        loading: false
-      };
-    case CLEAR_PAYMENT_ID:
-    case CLEAR_CLIENT_SECRET:
-      return {
-        ...state,
-        clientSecret: '',
-        paymentId: '',
-        loading: false
-      };
-    case SET_PAYMENT_ID:
-      return {
-        ...state,
-        paymentId: payload,
-        loading: false
       };
     default:
       return state;
