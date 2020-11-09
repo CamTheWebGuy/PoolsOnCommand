@@ -7,8 +7,7 @@ import {
   Button,
   Spinner,
   ListGroup,
-  InputGroup,
-  Modal
+  InputGroup
 } from 'react-bootstrap';
 import {
   getOneProduct,
@@ -22,7 +21,6 @@ import {
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import ReactQuill, { getContents, Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ProductItemForm from './ProductItemForm';
 import DeleteConfirmModal from './DeleteConfirmModal';

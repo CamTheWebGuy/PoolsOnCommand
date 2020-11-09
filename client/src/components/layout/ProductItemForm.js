@@ -94,6 +94,10 @@ const ProductItemForm = ({
     newItemDL2Title: ''
   });
 
+  const [newItemVideoContent, setNewItemVideoContent] = useState({
+    content: ''
+  });
+
   const [newItemContent, setNewItemContent] = useState({
     content: ''
   });
@@ -112,6 +116,10 @@ const ProductItemForm = ({
 
   const onNewItemChange = e => {
     setNewItemForm({ ...newItemForm, [e.target.name]: e.target.value });
+  };
+
+  const onNewItemVideoContentChange = e => {
+    setNewItemVideoContent({ ...newItemVideoContent, content: e });
   };
 
   const onNewItemContentChange = e => {
@@ -135,8 +143,8 @@ const ProductItemForm = ({
   };
 
   const onAddClick = async e => {
-    if (!newItemForm.newItemName || !newItemContent.content) {
-      window.alert('Item Name & Content are required!');
+    if (!newItemForm.newItemName) {
+      window.alert('Item Name required!');
     } else {
       setLoading();
       await addNewItem(
@@ -146,7 +154,8 @@ const ProductItemForm = ({
         newItemForm.newItemDL1Title,
         newItemForm.newItemDL2,
         newItemForm.newItemDL2Title,
-        newItemContent.content
+        newItemContent.content,
+        newItemVideoContent.content
       );
       await getOneProduct(productId);
       await hideAddForm();
@@ -232,7 +241,7 @@ const ProductItemForm = ({
         </Button>
       </div>
     );
-  } else if (!show || clickedBy != itemId) {
+  } else if (!show || clickedBy !== itemId) {
     return <div></div>;
   }
 
@@ -255,7 +264,7 @@ const ProductItemForm = ({
             theme='snow'
             modules={editorModules}
             formats={editorFormats}
-            onChange={e => onNewItemContentChange(e)}
+            onChange={e => onNewItemVideoContentChange(e)}
           />
 
           <Form.Label className='mgn-top-20'>Item Content</Form.Label>
@@ -312,7 +321,7 @@ const ProductItemForm = ({
         </div>
       </Fragment>
     );
-  } else if (!show || clickedBy != itemId) {
+  } else if (!show || clickedBy !== itemId) {
     return <div></div>;
   }
 };

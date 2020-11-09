@@ -7,8 +7,9 @@ import Login from './components/layout/Login';
 import MembersArea from './components/layout/MembersArea';
 import AdminPanel from './components/layout/AdminPanel';
 import ProductEdit from './components/layout/ProductEdit';
+import Checkout from './components/layout/Checkout';
+import OTO1 from './components/layout/OTO1';
 
-import Alert from './components/layout/Alert';
 import PrivateRoute from './components/routing/PrivateRoute';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -32,10 +33,10 @@ function App() {
     <Provider store={store}>
       <Router>
         <Fragment>
-          <Navbar />
-          <Alert />
           <Switch>
             <Route exact path='/' component={Landing} />
+            <Route exact path='/checkout' component={Checkout} />
+            <Route exact path='/oto-1' component={OTO1} />
             <Route exact path='/members-login' component={Login} />
             <PrivateRoute exact path='/members-area' component={MembersArea} />
             <PrivateRoute exact path='/admin-panel' component={AdminPanel} />

@@ -88,7 +88,8 @@ export const addNewItem = (
   newItemDL1Title,
   newItemDL2,
   newItemDL2Title,
-  newItemContent
+  newItemContent,
+  newItemVideoContent
 ) => async dispatch => {
   try {
     const config = {
@@ -102,7 +103,8 @@ export const addNewItem = (
       newItemDL1Title,
       newItemDL2,
       newItemDL2Title,
-      newItemContent
+      newItemContent,
+      newItemVideoContent
     });
 
     const product = await axios.patch(

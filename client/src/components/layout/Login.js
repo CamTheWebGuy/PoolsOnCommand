@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Row, Container, Col, Form, Button } from 'react-bootstrap';
 import { login } from '../../actions/auth';
+import Navbar from './Navbar';
+import Alert from './Alert';
 
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -31,6 +33,8 @@ const Login = ({ login, isAuthenticated }) => {
 
   return (
     <Fragment>
+      <Navbar />
+      <Alert />
       <Container className='mgn-top-50'>
         <Row>
           <Col md='6' className='mgn-top-30'>
