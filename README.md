@@ -19,8 +19,8 @@ Makes use of Bootstrap 4
 - [x] Mark Order as Paid (may not keep this long term, just an idea)
 - [x] Add Delete/Edit Product Item(s) Functionality
 - [x] Add Delete Product Functionality
-- [ ] Double check admin restrictions for routes - (the check is implemented but I didnt add it to all the proper routes yet)
 - [x] Implement Payment System (Stripe, doesn't include subscriptions at this time.)
+- [ ] Double check admin restrictions for routes - (the check is implemented but I didnt add it to all the proper routes yet)
 - [ ] Implement System to Track Sales Numbers
 - [ ] Add Sanitization to User Input Received
 
