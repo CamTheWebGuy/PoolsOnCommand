@@ -69,6 +69,10 @@ img {
   margin-top: 50px!important;
 }
 
+.pdding-top-30{
+  padding-top: 30px;
+}
+
 .pdding-top-50{
   padding-top: 50px;
 }
@@ -203,6 +207,26 @@ img {
   padding: 15px;
 }
 
+.cta-btn-red {
+  background: #ef4836;
+  border: 1px solid #ad3e31;
+  border-bottom: 4px solid #ad3e31;
+  color: #fff;
+  font-size: 27px;
+  line-height: 22px;
+  font-family: 'Roboto', sans-serif;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: -1px -1px 0px rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  padding: 25px;
+}
+
+.cta-btn-red:hover {
+  background: #ca3f30;
+  border: 1px solid #ad3e31;
+  border-bottom: 4px solid #ad3e31;
+}
+
 .cta-btn-yellow.black {
   background: #000000;
   color: #fff;
@@ -250,6 +274,11 @@ img {
 
 .btn-sub-text {
   font-size: 12px;
+  font-weight: 400;
+}
+
+.btn-sub-text {
+  font-size: 15px;
   font-weight: 400;
 }
 
@@ -527,6 +556,10 @@ img {
   font-weight: 700;
   font-size: 32px;
   padding-top: 30px;
+}
+
+.special-elite-font{
+  font-family: 'Special Elite', cursive;
 }
 
 .landing__sl-divider img{
@@ -1284,10 +1317,56 @@ img {
   -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
   -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
   box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  border-radius: 5px;
 }
 
 .oto__content p{
   padding-top: 10px;
 }
+
+.oto__order{
+  background-color: #f2f2f2f2;
+  padding-top: 20px;
+  
+}
+
+.oto__order-content{
+  padding: 50px;
+  margin: 0 auto;
+  background-color: rgb(255, 255, 255);
+  outline: none;
+  width: 61%;
+  max-width: 100%;
+  -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  border-radius: 5px;
+}
+
+.oto__content-box{
+  background: #fbf8eb;
+  border: 4px dashed #29c3b1;
+}
+
+.order__complete{
+  background: #f2f2f2;
+}
+
+.order__complete-box{
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 0.25em rgba(0,0,0,0.3);
+}
+
+.gray-bg{
+  background: #f2f2f2;
+  padding-bottom: 30px;
+}
+
+.cta-btn-member-login{
+  padding-bottom: 20px;
+}
+
+
 
 
