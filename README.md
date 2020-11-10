@@ -20,7 +20,7 @@ Makes use of Bootstrap 4
 - [x] Add Delete/Edit Product Item(s) Functionality
 - [x] Add Delete Product Functionality
 - [ ] Double check admin restrictions for routes - (the check is implemented but I didnt add it to all the proper routes yet)
-- [ ] Implement Payment System (Likely PayPal, may include subscriptions as well)
+- [x] Implement Payment System (Stripe, doesn't include subscriptions at this time.)
 - [ ] Implement System to Track Sales Numbers
 - [ ] Add Sanitization to User Input Received
 
@@ -35,11 +35,14 @@ Makes use of Bootstrap 4
 - [x] Add Edit/Delete Product Items Functionality
 - [x] Add Create New Product Page
 - [x] Finish Members Area Functionality
-- [ ] Implement Payment System
+- [x] Implement Payment System
+- [x] Add Upsell/Downsell Pages
+- [x] Add Cart/Payment Page
+- [x] Add Purchase Complete Page
+- [ ] Add "View Invoice" functionality to Order Complete page
 - [ ] Add functionality to payment form on landing page
-- [ ] Add Upsell/Downsell Pages
-- [ ] Add Cart/Payment Page
-- [ ] Add Purchase Complete Page
+- [ ] Add functionality for Upsell/Downsell Redirects and Payments.
+- [ ] Add functionality for Bump Offer on Cart/Payment Page.
 - [ ] Add 404 Page
 - [ ] Add "My Orders" page for members - Possibly with ability to cancel subscriptions if they are implemented
 - [ ] Replace Logos (Just Placeholders for now)
