@@ -1,12 +1,35 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Row, Col, Container, Form, Button } from 'react-bootstrap';
 import Moment from 'react-moment';
 import Navbar from '../layout/Navbar';
 import Alert from '../layout/Alert';
 
-const LandingTop = props => {
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { addInfo } from '../../actions/order';
+import { useHistory } from 'react-router-dom';
+
+const LandingTop = ({ addInfo }) => {
+  const history = useHistory();
   let date = new Date();
   date.setDate(date.getDate() + 1);
+
+  const [formData, setFormData] = useState({
+    email: '',
+    phone: ''
+  });
+
+  const { email, phone } = formData;
+
+  const onChange = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = e => {
+    e.preventDefault();
+    addInfo(email, phone);
+    history.push('/checkout');
+  };
 
   return (
     <Fragment>
@@ -173,13 +196,15 @@ const LandingTop = props => {
               </p>
               <i className='fa fa-arrow-down fsize-46 color-red'></i>
 
-              <Form className='mgn-top-20'>
+              <Form className='mgn-top-20' onSubmit={e => onSubmit(e)}>
                 <Form.Group>
                   <Form.Control
-                    type='text'
+                    type='email'
                     size='lg'
                     name='email'
+                    value={email}
                     placeholder='Your Best Email Here (for account)...'
+                    onChange={e => onChange(e)}
                   />
                 </Form.Group>
 
@@ -188,12 +213,18 @@ const LandingTop = props => {
                     type='tel'
                     size='lg'
                     name='phone'
+                    value={phone}
                     placeholder='Phone Number (for book updates)...'
+                    onChange={e => onChange(e)}
                   />
                 </Form.Group>
 
                 <Form.Group>
-                  <Button className='cta-btn-yellow ea-buttonRocking' block>
+                  <Button
+                    className='cta-btn-yellow ea-buttonRocking'
+                    block
+                    type='submit'
+                  >
                     <i class='fas fa-angle-right'></i>Go To Step #2
                     <br />
                     <span className='btn-sub-text'>Get Your eBook Now!</span>
@@ -217,4 +248,8 @@ const LandingTop = props => {
   );
 };
 
-export default LandingTop;
+LandingTop.propTypes = {
+  addInfo: PropTypes.func.isRequired
+};
+
+export default connect(null, { addInfo })(LandingTop);

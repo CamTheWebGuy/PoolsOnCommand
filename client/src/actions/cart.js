@@ -6,8 +6,34 @@ import {
   CLEAR_CART,
   SET_CLIENT_SECRET,
   CLEAR_CLIENT_SECRET,
-  SET_PAYMENT_ID
+  SET_PAYMENT_ID,
+  ADD_CART_FORM_ERROR,
+  REMOVE_CART_FORM_ERROR,
+  ERROR_LOADING_FALSE
 } from './types';
+
+// Add Error to Form State
+export const addError = itemName => async dispatch => {
+  try {
+    dispatch({
+      type: ADD_CART_FORM_ERROR,
+      payload: itemName
+    });
+  } catch (err) {
+    dispatch(setAlert('Error loading form validation', 'danger'));
+  }
+};
+
+// Set error loading to false
+export const errorLoadingFalse = () => async dispatch => {
+  try {
+    dispatch({
+      type: ERROR_LOADING_FALSE
+    });
+  } catch (err) {
+    dispatch(setAlert('Error loading form validation', 'danger'));
+  }
+};
 
 // Add Item to Cart
 export const addItemToCart = productId => async dispatch => {

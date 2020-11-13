@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Formik, useFormikContext } from 'formik';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -9,29 +10,56 @@ import PropTypes from 'prop-types';
 import {
   clearCart,
   createPaymentIntent,
-  updatePaymentIntent
+  updatePaymentIntent,
+  addError,
+  errorLoadingFalse
 } from '../../actions/cart';
 
+import { register } from '../../actions/auth';
+import validator from 'validator';
+
 const CheckoutForm = ({
+  formData,
+  errorLoadingFalse,
+  addError,
+  register,
   clearCart,
   createPaymentIntent,
   updatePaymentIntent,
   clientSecret,
-  cartItems: cartItems
+  cartItems: cartItems,
+  orderError: orderError,
+  formError: formError
 }) => {
+  //console.log(formData);
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
   const [disabled, setDisabled] = useState(true);
-  // const [clientSecretCode, setClientSecretCode] = useState(clientSecret);
   const stripe = useStripe();
   const elements = useElements();
 
-  // useEffect(() => {
-  //   if (clientSecret) {
-  //     setClientSecretCode(clientSecret);
-  //   }
-  // }, [clientSecret]);
+  const {
+    values,
+    submitForm,
+    isValid,
+    validateForm,
+    setFieldTouched,
+    isValidating
+  } = useFormikContext();
+
+  const {
+    fName,
+    lName,
+    email,
+    businessName,
+    country,
+    state,
+    zip,
+    password,
+    passwordConfirm,
+    phone
+  } = formData;
 
   const cardStyle = {
     style: {
@@ -59,7 +87,23 @@ const CheckoutForm = ({
   };
 
   const handleSubmit = async ev => {
-    ev.preventDefault();
+    try {
+      register(
+        fName,
+        lName,
+        businessName,
+        country,
+        state,
+        zip,
+        email,
+        password
+      );
+    } catch (err) {
+      setProcessing(false);
+      console.log('Payment Failed: Failed to register user');
+      return setError('Payment Failed: User Could Not Be Registered');
+    }
+
     setProcessing(true);
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -84,13 +128,33 @@ const CheckoutForm = ({
       setProcessing(false);
       setSucceeded(true);
     } else {
-      setError(`Payment faied ${error.message}`);
+      setError(`Payment failed ${error.message}`);
       setProcessing(false);
+      console.log('payment not sent');
     }
   };
 
   return (
-    <form id='payment-form' onSubmit={handleSubmit} disabled={!stripe}>
+    <form
+      id='payment-form'
+      onSubmit={async e => {
+        e.preventDefault();
+
+        const validation = await validateForm();
+
+        Object.keys(validation).forEach(key => {
+          setFieldTouched(`${key}`, true);
+        });
+
+        console.log(validation);
+
+        if (Object.keys(validation).length === 0) {
+          console.log('IS VALID');
+          handleSubmit();
+        }
+      }}
+      disabled={!stripe}
+    >
       <CardElement
         id='card-element'
         options={cardStyle}
@@ -131,16 +195,24 @@ const CheckoutForm = ({
 CheckoutForm.propTypes = {
   clearCart: PropTypes.func.isRequired,
   createPaymentIntent: PropTypes.func.isRequired,
-  updatePaymentIntent: PropTypes.func.isRequired
+  updatePaymentIntent: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+  addError: PropTypes.func.isRequired,
+  errorLoadingFalse: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   paymentId: state.cart.paymentId,
-  cartItems: state.cart.cartItems
+  cartItems: state.cart.cartItems,
+  orderError: state.orders.orderError,
+  formError: state.cart.formError
 });
 
 export default connect(mapStateToProps, {
+  register,
   clearCart,
   createPaymentIntent,
-  updatePaymentIntent
+  updatePaymentIntent,
+  addError,
+  errorLoadingFalse
 })(CheckoutForm);
