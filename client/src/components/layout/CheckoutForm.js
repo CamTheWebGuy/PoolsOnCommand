@@ -45,7 +45,8 @@ const CheckoutForm = ({
     isValid,
     validateForm,
     setFieldTouched,
-    isValidating
+    isValidating,
+    setFieldError
   } = useFormikContext();
 
   const {
@@ -152,6 +153,11 @@ const CheckoutForm = ({
 
         if (Object.keys(validation).length === 0 && user.status === 204) {
           handleSubmit();
+        } else {
+          setFieldError(
+            'email',
+            'A user with this email already exists, please login or try a different email'
+          );
         }
       }}
       disabled={!stripe}
