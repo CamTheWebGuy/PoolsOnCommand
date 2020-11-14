@@ -94,4 +94,24 @@ router.post(
 // @desc     Delete User
 // @access   Private
 
+// @route    GET api/users/exist/:email
+// @desc     See if a user exists by Email
+// @access   Public
+router.get('/exist/:email', async (req, res) => {
+  try {
+    const user = await User.find({ email: req.params.email }).select(
+      '-password -isAdmin -date -name -_id'
+    );
+
+    if (!user || user.length === 0) {
+      return res.status(204).json({ msg: 'No user found' });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;

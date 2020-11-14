@@ -148,8 +148,9 @@ const CheckoutForm = ({
 
         console.log(validation);
 
-        if (Object.keys(validation).length === 0) {
-          console.log('IS VALID');
+        const user = await axios.get(`/api/users/exist/${values.email}`);
+
+        if (Object.keys(validation).length === 0 && user.status === 204) {
           handleSubmit();
         }
       }}
