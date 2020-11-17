@@ -16,7 +16,7 @@ const OTO1 = () => {
                 <Row>
                   <Col md='3'>
                     <div className='oto__step_btn oto__complete'>
-                      <i class='far fa-check-square'></i> Step 1: eBook
+                      <i className='far fa-check-square'></i> Step 1: eBook
                     </div>
                   </Col>
                   <Col md='3'>
@@ -42,9 +42,9 @@ const OTO1 = () => {
                   src='https://player.vimeo.com/video/100902001?title=0&byline=0&portrait=0'
                   width='640'
                   height='360'
-                  frameborder='0'
+                  frameBorder='0'
                   allow='autoplay; fullscreen'
-                  allowfullscreen
+                  allowFullScreen
                   className='mgn-top-20 mgn-btm-50'
                 ></iframe>
               </div>
@@ -228,7 +228,7 @@ const OTO1 = () => {
                   Once You Start Reading The Book And Implementing The 2HA
                   System - Everything Is Going To Change For You…
                 </h2>
-                <ul class='greenchecklist mgn-top-50'>
+                <ul className='greenchecklist mgn-top-50'>
                   <li>
                     <strong>
                       <em>You’re going to</em>{' '}
@@ -417,7 +417,7 @@ const OTO1 = () => {
                 <div className='text-center'>
                   <img src='img/time.png' style={{ width: '70%' }} alt='' />
                 </div>
-                <ul class='greenchecklist mgn-top-50'>
+                <ul className='greenchecklist mgn-top-50'>
                   <li>
                     <strong>
                       Getting FREE clients <u>takes work…</u>
@@ -546,7 +546,7 @@ const OTO1 = () => {
                   Getting Strategy, Ads, Templates, Pages, Forms, Scripts,
                   Hiring Templates, E-Mails and everything else.
                 </p>
-                <ul class='greenchecklist mgn-top-50'>
+                <ul className='greenchecklist mgn-top-50'>
                   <li>
                     For example, the exact process that{' '}
                     <strong>
@@ -643,7 +643,7 @@ const OTO1 = () => {
                     <u>And the best part?</u>
                   </strong>
                 </p>
-                <ul class='greenchecklist mgn-top-50'>
+                <ul className='greenchecklist mgn-top-50'>
                   <li>
                     No one will ever see your IG profile, you just need one to
                     be able to find the leads
@@ -1354,7 +1354,7 @@ const OTO1 = () => {
                   That’s it! - Just $97 For the Ultimate Agency Package
                 </h2>
                 <p>You're getting...</p>
-                <ul class='greenchecklist mgn-top-50'>
+                <ul className='greenchecklist mgn-top-50'>
                   <li>
                     <strong>
                       <em>All of our ads</em>
