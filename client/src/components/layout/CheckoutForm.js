@@ -15,6 +15,8 @@ import {
   errorLoadingFalse
 } from '../../actions/cart';
 
+import { addOrder } from '../../actions/order';
+
 import { register } from '../../actions/auth';
 import validator from 'validator';
 
@@ -22,6 +24,7 @@ const CheckoutForm = ({
   formData,
   errorLoadingFalse,
   addError,
+  addOrder,
   register,
   clearCart,
   createPaymentIntent,
@@ -120,11 +123,13 @@ const CheckoutForm = ({
           id,
           cartItems
         });
+        addOrder(cartItems);
         console.log(data);
       } catch (err) {
         console.error(err);
       }
 
+      // Create order in DB
       setError(null);
       setProcessing(false);
       setSucceeded(true);
@@ -186,7 +191,7 @@ const CheckoutForm = ({
         </div>
       )}
       {/* Show a success message upon completion */}
-      {succeeded && <Redirect to='/order-complete' />}
+      {/* {succeeded && <Redirect to='/order-complete' />} */}
       <p className={succeeded ? 'result-message' : 'result-message hidden'}>
         Payment succeeded, see the result in your
         <a href={`https://dashboard.stripe.com/test/payments`}>
@@ -205,6 +210,7 @@ CheckoutForm.propTypes = {
   updatePaymentIntent: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   addError: PropTypes.func.isRequired,
+  addOrder: PropTypes.func.isRequired,
   errorLoadingFalse: PropTypes.func.isRequired
 };
 
@@ -221,5 +227,6 @@ export default connect(mapStateToProps, {
   createPaymentIntent,
   updatePaymentIntent,
   addError,
+  addOrder,
   errorLoadingFalse
 })(CheckoutForm);

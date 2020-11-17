@@ -50,12 +50,6 @@ router.post(
 
         const createdOrder = await order.save();
 
-        // const orderId = createdOrder._id;
-
-        // await User.findByIdAndUpdate(req.user.id, {
-        //   products: orderId
-        // });
-
         res.status(201).json(createdOrder);
       } catch (err) {
         console.error(err.message);
