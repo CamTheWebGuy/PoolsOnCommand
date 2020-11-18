@@ -102,7 +102,6 @@ const CheckoutForm = ({
       const { id } = paymentMethod;
 
       try {
-        console.log('Attempting Payment');
         const { data } = await axios.post('/api/stripe/charge', {
           id,
           cartItems
