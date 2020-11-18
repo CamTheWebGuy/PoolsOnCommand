@@ -52,6 +52,7 @@ router.post('/charge', async (req, res) => {
     return res.status(200).json({ confirm: 'success' });
   } catch (err) {
     console.log(err);
+    return res.status(400).send({ error: err.message });
   }
 });
 

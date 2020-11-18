@@ -91,23 +91,6 @@ const CheckoutForm = ({
   };
 
   const handleSubmit = async ev => {
-    try {
-      register(
-        fName,
-        lName,
-        businessName,
-        country,
-        state,
-        zip,
-        email,
-        password
-      );
-    } catch (err) {
-      setProcessing(false);
-      console.log('Payment Failed: Failed to register user');
-      return setError('Payment Failed: User Could Not Be Registered');
-    }
-
     setProcessing(true);
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -119,17 +102,29 @@ const CheckoutForm = ({
       const { id } = paymentMethod;
 
       try {
+        console.log('Attempting Payment');
         const { data } = await axios.post('/api/stripe/charge', {
           id,
           cartItems
         });
+        register(
+          fName,
+          lName,
+          businessName,
+          country,
+          state,
+          zip,
+          email,
+          password
+        );
         addOrder(cartItems);
-        console.log(data);
       } catch (err) {
-        console.error(err);
+        console.log(err);
+        setProcessing(false);
+        setSucceeded(false);
+        return setError('Payment Failed: Card was declined.');
       }
 
-      // Create order in DB
       setError(null);
       setProcessing(false);
       setSucceeded(true);
@@ -186,8 +181,8 @@ const CheckoutForm = ({
 
       {/* Show any error that happens when processing the payment */}
       {error && (
-        <div className='card-error' role='alert'>
-          {error}
+        <div className='card-error color-red' role='alert'>
+          There was an error while processing payment. {error}
         </div>
       )}
       {/* Show a success message upon completion */}
