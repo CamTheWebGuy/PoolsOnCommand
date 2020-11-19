@@ -1,8 +1,23 @@
 import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Row, Col, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const DS1 = () => {
+import { addItemToCart } from '../../actions/cart';
+import { useHistory } from 'react-router-dom';
+
+const DS1 = ({ addItemToCart }) => {
+  const history = useHistory();
+
+  const itemId = '5fb5a288199ac950f4af84c0';
+
+  const addItemToOrder = e => {
+    e.preventDefault();
+    addItemToCart(itemId);
+    history.push('/oto-2');
+  };
+
   return (
     <Fragment>
       <section className='oto__header'>
@@ -926,7 +941,10 @@ const DS1 = () => {
               <h4>
                 <u>Just one easy payment!</u>
               </h4>
-              <Button className='cta-btn-red mgn-top-20 mgn-btm-20'>
+              <Button
+                className='cta-btn-red mgn-top-20 mgn-btm-20'
+                onClick={e => addItemToOrder(e)}
+              >
                 YES! Upgrade My Order Now!
                 <br />
                 <span className='btn-sub-text'>
@@ -953,4 +971,8 @@ const DS1 = () => {
   );
 };
 
-export default DS1;
+DS1.propTypes = {
+  addItemToCart: PropTypes.func.isRequired
+};
+
+export default connect(null, { addItemToCart })(DS1);

@@ -1,8 +1,26 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Row, Col, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const OTO1 = () => {
+import { addItemToCart, clearCart } from '../../actions/cart';
+import { useHistory } from 'react-router-dom';
+
+const OTO1 = ({ addItemToCart, clearCart }) => {
+  const history = useHistory();
+  useEffect(() => {
+    clearCart();
+  }, [clearCart]);
+
+  const itemId = '5fb5a268199ac950f4af84bf';
+
+  const addItemToOrder = e => {
+    e.preventDefault();
+    addItemToCart(itemId);
+    history.push('/oto-2');
+  };
+
   return (
     <Fragment>
       <section className='oto__header'>
@@ -1569,7 +1587,10 @@ const OTO1 = () => {
               <h4>
                 <u>This Is A One Time Offer You Will See Only Once</u>
               </h4>
-              <Button className='cta-btn-red mgn-top-20 mgn-btm-20'>
+              <Button
+                className='cta-btn-red mgn-top-20 mgn-btm-20'
+                onClick={e => addItemToOrder(e)}
+              >
                 YES! Upgrade My Order Now!
                 <br />
                 <span className='btn-sub-text'>
@@ -1597,4 +1618,9 @@ const OTO1 = () => {
   );
 };
 
-export default OTO1;
+OTO1.propTypes = {
+  addItemToCart: PropTypes.func.isRequired,
+  clearCart: PropTypes.func.isRequired
+};
+
+export default connect(null, { addItemToCart, clearCart })(OTO1);
