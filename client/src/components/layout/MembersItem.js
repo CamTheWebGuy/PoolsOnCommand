@@ -3,6 +3,7 @@ import { Nav } from 'react-bootstrap';
 
 const MembersItem = props => {
   const itemsList = props.items;
+
   return (
     <Nav
       variant='pills'

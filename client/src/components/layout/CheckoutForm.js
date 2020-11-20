@@ -106,7 +106,7 @@ const CheckoutForm = ({
           id,
           cartItems
         });
-        register(
+        await register(
           fName,
           lName,
           businessName,

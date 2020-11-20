@@ -246,20 +246,33 @@ export const getProducts = () => async dispatch => {
     let itemsList = [];
 
     function getOrderItems(myArray) {
-      myArray.forEach(item => {
-        let itemOrders = {};
-        const list = item.orderItems;
-        const orderId = item._id;
+      if (myArray.length > 1) {
+        myArray.forEach(item => {
+          const list = item.orderItems;
+          const orderId = item._id;
+          list.forEach(e => {
+            let itemOrders = {};
+            itemOrders.orderId = orderId;
+            itemOrders.product = e.product;
+            itemsList.push(itemOrders);
+          });
+        });
+      } else {
+        const orderId = myArray[0]._id;
+        const list = myArray[0].orderItems;
         list.forEach(e => {
+          let itemOrders = {};
           itemOrders.orderId = orderId;
           itemOrders.product = e.product;
           itemsList.push(itemOrders);
         });
-      });
+      }
     }
 
     const orderStuff = userOrders.data;
     getOrderItems(orderStuff);
+
+    //itemsList = itemsList.reverse();
 
     const products = await axios.all(
       itemsList.map(item => axios.get(`api/product/${item.product}`))
