@@ -10,7 +10,7 @@ const OrderSchema = new mongoose.Schema(
     orderItems: [
       {
         name: { type: String, required: true },
-        price: { type: Number, required: true },
+        price: { type: String, required: true },
         product: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
@@ -29,7 +29,7 @@ const OrderSchema = new mongoose.Schema(
       email_address: { type: String }
     },
     totalPrice: {
-      type: Number,
+      type: String,
       required: true,
       default: 0.0
     },

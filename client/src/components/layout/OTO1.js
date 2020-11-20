@@ -1,8 +1,26 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Row, Col, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const OTO1 = () => {
+import { addItemToCart, clearCart } from '../../actions/cart';
+import { useHistory } from 'react-router-dom';
+
+const OTO1 = ({ addItemToCart, clearCart }) => {
+  const history = useHistory();
+  useEffect(() => {
+    clearCart();
+  }, [clearCart]);
+
+  const itemId = '5fb5a268199ac950f4af84bf';
+
+  const addItemToOrder = e => {
+    e.preventDefault();
+    addItemToCart(itemId);
+    history.push('/oto-2');
+  };
+
   return (
     <Fragment>
       <section className='oto__header'>
@@ -16,7 +34,7 @@ const OTO1 = () => {
                 <Row>
                   <Col md='3'>
                     <div className='oto__step_btn oto__complete'>
-                      <i class='far fa-check-square'></i> Step 1: eBook
+                      <i className='far fa-check-square'></i> Step 1: eBook
                     </div>
                   </Col>
                   <Col md='3'>
@@ -42,9 +60,9 @@ const OTO1 = () => {
                   src='https://player.vimeo.com/video/100902001?title=0&byline=0&portrait=0'
                   width='640'
                   height='360'
-                  frameborder='0'
+                  frameBorder='0'
                   allow='autoplay; fullscreen'
-                  allowfullscreen
+                  allowFullScreen
                   className='mgn-top-20 mgn-btm-50'
                 ></iframe>
               </div>
@@ -228,7 +246,7 @@ const OTO1 = () => {
                   Once You Start Reading The Book And Implementing The 2HA
                   System - Everything Is Going To Change For You…
                 </h2>
-                <ul class='greenchecklist mgn-top-50'>
+                <ul className='greenchecklist mgn-top-50'>
                   <li>
                     <strong>
                       <em>You’re going to</em>{' '}
@@ -417,7 +435,7 @@ const OTO1 = () => {
                 <div className='text-center'>
                   <img src='img/time.png' style={{ width: '70%' }} alt='' />
                 </div>
-                <ul class='greenchecklist mgn-top-50'>
+                <ul className='greenchecklist mgn-top-50'>
                   <li>
                     <strong>
                       Getting FREE clients <u>takes work…</u>
@@ -546,7 +564,7 @@ const OTO1 = () => {
                   Getting Strategy, Ads, Templates, Pages, Forms, Scripts,
                   Hiring Templates, E-Mails and everything else.
                 </p>
-                <ul class='greenchecklist mgn-top-50'>
+                <ul className='greenchecklist mgn-top-50'>
                   <li>
                     For example, the exact process that{' '}
                     <strong>
@@ -643,7 +661,7 @@ const OTO1 = () => {
                     <u>And the best part?</u>
                   </strong>
                 </p>
-                <ul class='greenchecklist mgn-top-50'>
+                <ul className='greenchecklist mgn-top-50'>
                   <li>
                     No one will ever see your IG profile, you just need one to
                     be able to find the leads
@@ -1354,7 +1372,7 @@ const OTO1 = () => {
                   That’s it! - Just $97 For the Ultimate Agency Package
                 </h2>
                 <p>You're getting...</p>
-                <ul class='greenchecklist mgn-top-50'>
+                <ul className='greenchecklist mgn-top-50'>
                   <li>
                     <strong>
                       <em>All of our ads</em>
@@ -1569,7 +1587,10 @@ const OTO1 = () => {
               <h4>
                 <u>This Is A One Time Offer You Will See Only Once</u>
               </h4>
-              <Button className='cta-btn-red mgn-top-20 mgn-btm-20'>
+              <Button
+                className='cta-btn-red mgn-top-20 mgn-btm-20'
+                onClick={e => addItemToOrder(e)}
+              >
                 YES! Upgrade My Order Now!
                 <br />
                 <span className='btn-sub-text'>
@@ -1597,4 +1618,9 @@ const OTO1 = () => {
   );
 };
 
-export default OTO1;
+OTO1.propTypes = {
+  addItemToCart: PropTypes.func.isRequired,
+  clearCart: PropTypes.func.isRequired
+};
+
+export default connect(null, { addItemToCart, clearCart })(OTO1);

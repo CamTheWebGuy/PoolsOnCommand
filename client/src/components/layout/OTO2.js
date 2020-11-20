@@ -1,8 +1,22 @@
 import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Row, Col, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const OTO2 = () => {
+import { addItemToCart } from '../../actions/cart';
+import { useHistory } from 'react-router-dom';
+
+const OTO2 = ({ addItemToCart }) => {
+  const history = useHistory();
+
+  const itemId = '5fb6cb704fa8c85faca727d9';
+
+  const addItemToOrder = e => {
+    e.preventDefault();
+    addItemToCart(itemId);
+    history.push('/customize-order');
+  };
   return (
     <Fragment>
       <section className='oto__header' style={{ background: '#1b4b7d' }}>
@@ -510,7 +524,10 @@ const OTO2 = () => {
               <h4 className='color-red'>
                 <u>This Is A One Time Offer You Will See Only Once</u>
               </h4>
-              <Button className='cta-btn-red mgn-top-20 mgn-btm-20'>
+              <Button
+                className='cta-btn-red mgn-top-20 mgn-btm-20'
+                onClick={e => addItemToOrder(e)}
+              >
                 YES! Upgrade My Order Now!
                 <br />
                 <span className='btn-sub-text'>
@@ -538,4 +555,8 @@ const OTO2 = () => {
   );
 };
 
-export default OTO2;
+OTO2.propTypes = {
+  addItemToCart: PropTypes.func.isRequired
+};
+
+export default connect(null, { addItemToCart })(OTO2);

@@ -13,7 +13,7 @@ const User = require('../../models/User');
 router.post(
   '/',
   [
-    check('name', 'Name is required')
+    check('firstName', 'a First Name is required')
       .not()
       .isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
@@ -24,11 +24,23 @@ router.post(
   ],
   async (req, res) => {
     const errors = validationResult(req);
+    console.log(errors);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password } = req.body;
+    console.log('FIRED REGISTER ON BACKEND');
+
+    const {
+      firstName,
+      lastName,
+      businessName,
+      country,
+      state,
+      zip,
+      email,
+      password
+    } = req.body;
 
     try {
       let user = await User.findOne({ email });
@@ -40,7 +52,12 @@ router.post(
       }
 
       user = new User({
-        name,
+        firstName,
+        lastName,
+        businessName,
+        country,
+        state,
+        zip,
         email,
         password
       });
@@ -76,5 +93,25 @@ router.post(
 // @route    DELETE api/users
 // @desc     Delete User
 // @access   Private
+
+// @route    GET api/users/exist/:email
+// @desc     See if a user exists by Email
+// @access   Public
+router.get('/exist/:email', async (req, res) => {
+  try {
+    const user = await User.find({ email: req.params.email }).select(
+      '-password -isAdmin -date -name -_id'
+    );
+
+    if (!user || user.length === 0) {
+      return res.status(204).json({ msg: 'No user found' });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;

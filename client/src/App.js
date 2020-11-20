@@ -13,6 +13,7 @@ import OTO2 from './components/layout/OTO2';
 import DS1 from './components/layout/DS1';
 import DS2 from './components/layout/DS2';
 import OrderComplete from './components/layout/OrderComplete';
+import CustomizeOrder from './components/layout/CustomizeOrder';
 
 import PrivateRoute from './components/routing/PrivateRoute';
 
@@ -46,6 +47,7 @@ function App() {
             <Route exact path='/oto-2' component={OTO2} />
             <Route exact path='/ds-2' component={DS2} />
             <Route exact path='/order-complete' component={OrderComplete} />
+            <Route exact path='/customize-order' component={CustomizeOrder} />
             <Route exact path='/members-login' component={Login} />
             <PrivateRoute exact path='/members-area' component={MembersArea} />
             <PrivateRoute exact path='/admin-panel' component={AdminPanel} />

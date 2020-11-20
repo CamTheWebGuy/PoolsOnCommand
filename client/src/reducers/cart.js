@@ -1,14 +1,17 @@
 import {
   ADD_PRODUCT_CART,
   REMOVE_PRODUCT_CART,
-  CLEAR_CART
+  CLEAR_CART,
+  ADD_CART_FORM_ERROR,
+  ERROR_LOADING_FALSE
 } from '../actions/types';
 
 const initialState = {
   cartItems: [],
   cartTotal: '0.00',
-  clientSecret: '',
-  paymentId: '',
+  formError: null,
+  errorItems: [],
+  errorLoading: true,
   loading: true
 };
 
@@ -31,6 +34,17 @@ export default function(state = initialState, action) {
       return {
         ...state,
         cartItems: []
+      };
+    case ADD_CART_FORM_ERROR:
+      return {
+        ...state,
+        formError: true,
+        errorItems: [...state.errorItems, payload]
+      };
+    case ERROR_LOADING_FALSE:
+      return {
+        ...state,
+        errorLoading: false
       };
     default:
       return state;

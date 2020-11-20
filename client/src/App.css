@@ -81,6 +81,10 @@ img {
   padding-bottom: 30px;
 }
 
+.pdding-btm-50{
+  padding-bottom: 50px;
+}
+
 .pdding-20{
   padding: 20px
 }
@@ -1350,6 +1354,7 @@ img {
 
 .order__complete{
   background: #f2f2f2;
+  height: 100vh;
 }
 
 .order__complete-box{
