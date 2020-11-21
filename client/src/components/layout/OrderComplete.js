@@ -46,11 +46,10 @@ const OrderComplete = ({
                         Total: <strong>${orderTotal}</strong>
                       </p>
                     )}
-                    <Button variant='primary'>View Invoice</Button>
                   </div>
                   <div className='mgn-top-20 cta-btn-member-login'>
                     <h3>Access Your Products:</h3>
-                    <Button variant='success'>
+                    <Button variant='success' href='/members-area'>
                       <strong>Login To Members Area to Access Products</strong>
                     </Button>
                   </div>

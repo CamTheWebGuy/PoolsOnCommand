@@ -33,6 +33,7 @@ const Checkout = ({
   const promise = loadStripe('pk_test_nuYT3Yw8YMM78sdDj3EWlhaF');
 
   useEffect(() => {
+    clearCart();
     addItemToCart(bookId);
     addItemToCart(audioId);
   }, [addItemToCart]);
@@ -43,7 +44,7 @@ const Checkout = ({
   const [formData, setFormData] = useState({
     fName: '',
     lName: '',
-    email: orderEmail,
+    email: orderEmail ? orderEmail : '',
     businessName: '',
     country: '',
     state: '',
@@ -160,7 +161,7 @@ const Checkout = ({
                 initialValues={{
                   fName: '',
                   lName: '',
-                  email: orderEmail,
+                  email: orderEmail ? orderEmail : '',
                   businessName: '',
                   country: '',
                   state: '',

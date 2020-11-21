@@ -272,8 +272,6 @@ export const getProducts = () => async dispatch => {
     const orderStuff = userOrders.data;
     getOrderItems(orderStuff);
 
-    //itemsList = itemsList.reverse();
-
     const products = await axios.all(
       itemsList.map(item => axios.get(`api/product/${item.product}`))
     );

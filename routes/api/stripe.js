@@ -32,8 +32,10 @@ const calculateOrderAmount = async items => {
 // @desc     Charge a card
 // @access   Public
 router.post('/charge', async (req, res) => {
-  const { id, cartItems } = req.body;
+  const { id, cartItems, email } = req.body;
   const products = [];
+
+  console.log(email);
 
   try {
     cartItems.forEach(e => {
@@ -42,6 +44,7 @@ router.post('/charge', async (req, res) => {
     const amount = await calculateOrderAmount(products);
     const payment = await stripe.paymentIntents.create({
       amount,
+      receipt_email: email,
       currency: 'USD',
       description: 'Pools On Command',
       payment_method: id,

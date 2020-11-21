@@ -123,9 +123,9 @@ router.get('/', [auth, admin], async (req, res) => {
 // @access   Private
 router.get('/myorders/:id', [auth], async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.find({ user: req.user.id, _id: req.params.id });
 
-    if (!order) {
+    if (!order || order.length < 1) {
       return res.status(404).json({ msg: 'No order found' });
     }
 
