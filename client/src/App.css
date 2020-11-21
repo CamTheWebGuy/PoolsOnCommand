@@ -1098,7 +1098,8 @@ img {
 
 .members__container{
   background: #f2f2f2;
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
 }
 
 .members__main-content{
@@ -1106,6 +1107,10 @@ img {
   padding:45px;
   /*border: 5px solid rgb(225, 225, 225);*/
   border: 5px solid white;
+}
+
+.members__main-content iframe {
+  border: 0;
 }
 
 .members__divider {

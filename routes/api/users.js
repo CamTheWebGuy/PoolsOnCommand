@@ -15,8 +15,28 @@ router.post(
   [
     check('firstName', 'a First Name is required')
       .not()
-      .isEmpty(),
-    check('email', 'Please include a valid email').isEmail(),
+      .isEmpty()
+      .trim()
+      .escape(),
+    check('lastName', 'a Last Name is Required')
+      .not()
+      .isEmpty()
+      .trim()
+      .escape(),
+    check('businessName')
+      .trim()
+      .escape(),
+    check('country')
+      .trim()
+      .escape(),
+    check('zip')
+      .trim()
+      .escape(),
+    check('email', 'Please include a valid email')
+      .isEmail()
+      .normalizeEmail()
+      .trim()
+      .escape(),
     check(
       'password',
       'Please enter a password with 6 characters or more'
@@ -28,8 +48,6 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
-    console.log('FIRED REGISTER ON BACKEND');
 
     const {
       firstName,

@@ -35,7 +35,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { orderItems, paymentMethod, totalPrice } = req.body;
+    const { orderItems, paymentMethod, totalPrice, isPaid } = req.body;
 
     if (orderItems && orderItems.length === 0) {
       return res.status(400).json({ msg: 'No order items' });
@@ -45,7 +45,8 @@ router.post(
           orderItems,
           user: req.user.id,
           paymentMethod,
-          totalPrice
+          totalPrice,
+          isPaid
         });
 
         const createdOrder = await order.save();
