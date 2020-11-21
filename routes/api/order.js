@@ -99,7 +99,6 @@ router.get('/myorders', auth, async (req, res) => {
   }
 
   res.json(orders);
-  ``;
 });
 
 // @route    GET api/order
@@ -116,6 +115,27 @@ router.get('/', [auth, admin], async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
+  }
+});
+
+// @route    GET api/order/myorders/:id
+// @desc     Get my order by id
+// @access   Private
+router.get('/myorders/:id', [auth], async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ msg: 'No order found' });
+    }
+
+    res.json(order);
+  } catch (err) {
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: 'Order not found' });
+    }
+    res.status(500).send('Server Error');
+    console.log(err);
   }
 });
 

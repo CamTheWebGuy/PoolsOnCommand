@@ -1,6 +1,46 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { ADD_ORDER_INFO, ADD_ORDER_ITEMS, CLEAR_ORDER } from './types';
+import {
+  ADD_ORDER_INFO,
+  ADD_ORDER_ITEMS,
+  ADD_ORDER_TOTAL,
+  ADD_USER_ORDER,
+  CLEAR_ORDER
+} from './types';
+
+// Get Orders
+export const getOrderById = ordersArray => async dispatch => {
+  try {
+    //const { data } = await axios.get(`/api/order/myorders/${id}`);
+
+    const items = await axios.all(
+      ordersArray.map(item => axios.get(`api/order/myorders/${item}`))
+    );
+
+    // console.log('THESE ARE ITEMS');
+    // console.log(items);
+
+    //const orderTotal = data.totalPrice;
+
+    let orderTotal = '';
+
+    items.forEach(item => {
+      orderTotal = +orderTotal + +item.data.totalPrice;
+      orderTotal = orderTotal.toString();
+    });
+
+    console.log('order total');
+    console.log(orderTotal);
+
+    dispatch({
+      type: ADD_ORDER_TOTAL,
+      payload: orderTotal
+    });
+  } catch (err) {
+    dispatch(setAlert('Error getting order info', 'danger'));
+    console.log(err);
+  }
+};
 
 // Add User Info to Order
 export const addInfo = (email, phone) => async dispatch => {
@@ -49,7 +89,11 @@ export const addOrder = cartItems => async dispatch => {
       isPaid: true
     });
 
-    await axios.post('/api/order', body, config);
+    const { data } = await axios.post('/api/order', body, config);
+    dispatch({
+      type: ADD_USER_ORDER,
+      payload: data._id
+    });
   } catch (err) {
     dispatch(setAlert('Error adding order to DB', 'danger'));
     console.log(err);

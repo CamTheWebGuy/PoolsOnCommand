@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { addItemToCart } from '../../actions/cart';
 import { useHistory } from 'react-router-dom';
 
-const DS2 = ({ addItemToCart }) => {
+const DS2 = ({ addItemToCart, cartItems: cartItems }) => {
   const history = useHistory();
 
   const itemId = '5fb6cb824fa8c85faca727da';
@@ -195,11 +195,19 @@ const DS2 = ({ addItemToCart }) => {
             </div>
           </Container>
           <div className='mgn-top-20'>
-            <Link to='/customize-order'>
-              <strong>
-                <u>No Thanks, Please Do Not Add This Offer To My Purchase</u>
-              </strong>
-            </Link>
+            {cartItems.length < 1 ? (
+              <Link to='/order-complete'>
+                <strong>
+                  <u>No Thanks, Please Do Not Add This Offer To My Purchase</u>
+                </strong>
+              </Link>
+            ) : (
+              <Link to='/customize-order'>
+                <strong>
+                  <u>No Thanks, Please Do Not Add This Offer To My Purchase</u>
+                </strong>
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -211,4 +219,8 @@ DS2.propTypes = {
   addItemToCart: PropTypes.func.isRequired
 };
 
-export default connect(null, { addItemToCart })(DS2);
+const mapStateToProps = state => ({
+  cartItems: state.cart.cartItems
+});
+
+export default connect(mapStateToProps, { addItemToCart })(DS2);
