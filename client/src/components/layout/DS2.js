@@ -1,8 +1,22 @@
 import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Row, Col, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const DS2 = () => {
+import { addItemToCart } from '../../actions/cart';
+import { useHistory } from 'react-router-dom';
+
+const DS2 = ({ addItemToCart, cartItems: cartItems }) => {
+  const history = useHistory();
+
+  const itemId = '5fb6cb824fa8c85faca727da';
+
+  const addItemToOrder = e => {
+    e.preventDefault();
+    addItemToCart(itemId);
+    history.push('/customize-order');
+  };
   return (
     <Fragment>
       <section className='oto__header' style={{ background: '#1b4b7d' }}>
@@ -162,7 +176,10 @@ const DS2 = () => {
               <h4 className='color-red'>
                 <u>$9.95 per month, cancel anytime</u>
               </h4>
-              <Button className='cta-btn-red mgn-top-20 mgn-btm-20'>
+              <Button
+                className='cta-btn-red mgn-top-20 mgn-btm-20'
+                onClick={e => addItemToOrder(e)}
+              >
                 YES! Upgrade My Order Now!
                 <br />
                 <span className='btn-sub-text'>
@@ -178,11 +195,19 @@ const DS2 = () => {
             </div>
           </Container>
           <div className='mgn-top-20'>
-            <Link to='/order-complete'>
-              <strong>
-                <u>No Thanks, Please Do Not Add This Offer To My Purchase</u>
-              </strong>
-            </Link>
+            {cartItems.length < 1 ? (
+              <Link to='/order-complete'>
+                <strong>
+                  <u>No Thanks, Please Do Not Add This Offer To My Purchase</u>
+                </strong>
+              </Link>
+            ) : (
+              <Link to='/customize-order'>
+                <strong>
+                  <u>No Thanks, Please Do Not Add This Offer To My Purchase</u>
+                </strong>
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -190,4 +215,12 @@ const DS2 = () => {
   );
 };
 
-export default DS2;
+DS2.propTypes = {
+  addItemToCart: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  cartItems: state.cart.cartItems
+});
+
+export default connect(mapStateToProps, { addItemToCart })(DS2);

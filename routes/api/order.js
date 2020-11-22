@@ -35,7 +35,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { orderItems, paymentMethod, totalPrice } = req.body;
+    const { orderItems, paymentMethod, totalPrice, isPaid } = req.body;
 
     if (orderItems && orderItems.length === 0) {
       return res.status(400).json({ msg: 'No order items' });
@@ -45,7 +45,8 @@ router.post(
           orderItems,
           user: req.user.id,
           paymentMethod,
-          totalPrice
+          totalPrice,
+          isPaid
         });
 
         const createdOrder = await order.save();
@@ -99,7 +100,6 @@ router.get('/myorders', auth, async (req, res) => {
   }
 
   res.json(orders);
-  ``;
 });
 
 // @route    GET api/order
@@ -116,6 +116,27 @@ router.get('/', [auth, admin], async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
+  }
+});
+
+// @route    GET api/order/myorders/:id
+// @desc     Get my order by id
+// @access   Private
+router.get('/myorders/:id', [auth], async (req, res) => {
+  try {
+    const order = await Order.find({ user: req.user.id, _id: req.params.id });
+
+    if (!order || order.length < 1) {
+      return res.status(404).json({ msg: 'No order found' });
+    }
+
+    res.json(order);
+  } catch (err) {
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: 'Order not found' });
+    }
+    res.status(500).send('Server Error');
+    console.log(err);
   }
 });
 

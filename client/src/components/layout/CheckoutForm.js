@@ -104,9 +104,10 @@ const CheckoutForm = ({
       try {
         const { data } = await axios.post('/api/stripe/charge', {
           id,
-          cartItems
+          cartItems,
+          email
         });
-        register(
+        await register(
           fName,
           lName,
           businessName,

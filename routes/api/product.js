@@ -5,6 +5,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const admin = require('../../middleware/admin');
 const { check, validationResult } = require('express-validator');
+const sanitizeHtml = require('sanitize-html');
 
 const Product = require('../../models/Product');
 const User = require('../../models/User');
@@ -21,7 +22,9 @@ router.patch(
     [
       check('newItemName', 'Item must have a name')
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .trim()
+        .escape(),
       check('newItemContent', 'Item must have content')
         .not()
         .isEmpty()
@@ -40,12 +43,22 @@ router.patch(
 
     const productFields = {
       title: newItemName,
-      content: newItemContent,
-      videoContent: newItemVideoContent,
-      downloadOne: newItemDL1,
-      downloadOneTitle: newItemDL1Title,
-      downloadTwo: newItemDL2,
-      downloadTwoTitle: newItemDL2Title
+      content: sanitizeHtml(newItemContent),
+      videoContent: sanitizeHtml(newItemVideoContent, {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+          'iframe',
+          'img',
+          'strike'
+        ]),
+        allowedAttributes: {
+          a: ['href'],
+          iframe: ['src']
+        }
+      }),
+      downloadOne: sanitizeHtml(newItemDL1),
+      downloadOneTitle: sanitizeHtml(newItemDL1Title),
+      downloadTwo: sanitizeHtml(newItemDL2),
+      downloadTwoTitle: sanitizeHtml(newItemDL2Title)
     };
 
     try {
@@ -73,7 +86,9 @@ router.patch(
     [
       check('title', 'Item must have a title')
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .trim()
+        .escape(),
       check('content', 'Item must have content')
         .not()
         .isEmpty()
@@ -97,12 +112,22 @@ router.patch(
 
     const productFields = {
       'items.$.title': title,
-      'items.$.videoContent': videoContent,
-      'items.$.content': content,
-      'items.$.downloadOne': downloadOne,
-      'items.$.downloadOneTitle': downloadOneTitle,
-      'items.$.downloadTwo': downloadTwo,
-      'items.$.downloadTwoTitle': downloadTwoTitle
+      'items.$.videoContent': sanitizeHtml(videoContent, {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+          'iframe',
+          'img',
+          'strike'
+        ]),
+        allowedAttributes: {
+          a: ['href'],
+          iframe: ['src']
+        }
+      }),
+      'items.$.content': sanitizeHtml(content),
+      'items.$.downloadOne': sanitizeHtml(downloadOne),
+      'items.$.downloadOneTitle': sanitizeHtml(downloadOneTitle),
+      'items.$.downloadTwo': sanitizeHtml(downloadTwo),
+      'items.$.downloadTwoTitle': sanitizeHtml(downloadTwoTitle)
     };
     console.log(productFields);
 
@@ -130,14 +155,23 @@ router.patch(
     [
       check('name', 'Product name is required')
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .trim()
+        .escape(),
       check('price', 'Product price is required')
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .trim()
+        .escape(),
       check('category', 'Product category is required')
         .not()
-        .isEmpty(),
-      check('price', 'Price must be a number').isFloat()
+        .isEmpty()
+        .trim()
+        .escape(),
+      check('price', 'Price must be a number')
+        .isFloat()
+        .trim()
+        .escape()
     ]
   ],
   async (req, res) => {
@@ -146,11 +180,10 @@ router.patch(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, image, price, category } = req.body;
+    const { name, price, category } = req.body;
 
     const productFields = {
       name,
-      image,
       price,
       category
     };
@@ -179,13 +212,19 @@ router.post(
     [
       check('name', 'Product name is required')
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .trim()
+        .escape(),
       check('price', 'Product price is required')
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .trim()
+        .escape(),
       check('category', 'Product category is required')
         .not()
         .isEmpty()
+        .trim()
+        .escape()
     ]
   ],
   async (req, res) => {
@@ -194,14 +233,12 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, image, price, category, items } = req.body;
+    const { name, price, category } = req.body;
 
     const productFields = {
       name,
-      image,
       price,
-      category,
-      items
+      category
     };
 
     try {
@@ -234,7 +271,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // @route    GET api/product
-// @desc     Create ALL Products
+// @desc     Get ALL Products
 // @access   Private/Admin
 router.get('/', [auth, admin], async (req, res) => {
   try {

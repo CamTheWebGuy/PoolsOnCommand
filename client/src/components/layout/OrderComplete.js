@@ -1,8 +1,20 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Row, Col, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const OrderComplete = () => {
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { getOrderById } from '../../actions/order';
+
+const OrderComplete = ({
+  getOrderById,
+  userOrders: userOrders,
+  orderTotal: orderTotal
+}) => {
+  useEffect(() => {
+    getOrderById(userOrders);
+  }, [getOrderById, userOrders]);
   return (
     <Fragment>
       <section className='order__complete'>
@@ -29,14 +41,15 @@ const OrderComplete = () => {
                   ></iframe>
                   <div className='gray-bg mgn-top-50 pdding-top-30'>
                     <i class='far fa-check-circle fa-5x color-green'></i>
-                    <p className='fsize-18 mgn-top-20'>
-                      Total: <strong>$xx.xx</strong>
-                    </p>
-                    <Button variant='primary'>View Invoice</Button>
+                    {orderTotal && (
+                      <p className='fsize-18 mgn-top-20'>
+                        Total: <strong>${orderTotal}</strong>
+                      </p>
+                    )}
                   </div>
                   <div className='mgn-top-20 cta-btn-member-login'>
                     <h3>Access Your Products:</h3>
-                    <Button variant='success'>
+                    <Button variant='success' href='/members-area'>
                       <strong>Login To Members Area to Access Products</strong>
                     </Button>
                   </div>
@@ -50,4 +63,13 @@ const OrderComplete = () => {
   );
 };
 
-export default OrderComplete;
+OrderComplete.propTypes = {
+  getOrderById: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  userOrders: state.orders.userOrders,
+  orderTotal: state.orders.orderTotal
+});
+
+export default connect(mapStateToProps, { getOrderById })(OrderComplete);
