@@ -156,8 +156,7 @@ router.patch(
       check('name', 'Product name is required')
         .not()
         .isEmpty()
-        .trim()
-        .escape(),
+        .trim(),
       check('price', 'Product price is required')
         .not()
         .isEmpty()
@@ -171,7 +170,6 @@ router.patch(
       check('price', 'Price must be a number')
         .isFloat()
         .trim()
-        .escape()
     ]
   ],
   async (req, res) => {
@@ -180,12 +178,13 @@ router.patch(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, price, category } = req.body;
+    const { name, price, category, items } = req.body;
 
     const productFields = {
       name,
       price,
-      category
+      category,
+      items
     };
 
     try {

@@ -26,6 +26,8 @@ import 'react-quill/dist/quill.snow.css';
 import ProductItemForm from './ProductItemForm';
 import DeleteConfirmModal from './DeleteConfirmModal';
 
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
 const ProductEdit = ({
   getOneProduct,
   updateProduct,
@@ -58,6 +60,8 @@ const ProductEdit = ({
     clickedBy: ''
   });
 
+  const [itemsList, updateItemsList] = useState(null);
+
   useEffect(() => {
     getOneProduct(match.params.id);
     setFormData({
@@ -65,6 +69,9 @@ const ProductEdit = ({
       price: loading || !products.price ? '' : products.price,
       category: loading || !products.category ? '' : products.category
     });
+    if (!loading) {
+      updateItemsList(productItems);
+    }
   }, [loading, getOneProduct]);
 
   const { name, price, category } = formData;
@@ -75,7 +82,7 @@ const ProductEdit = ({
 
   const onSubmit = async e => {
     e.preventDefault();
-    updateProduct(match.params.id, name, price, category);
+    updateProduct(match.params.id, name, price, category, itemsList);
   };
 
   const onDeleteItemClick = e => {
@@ -87,6 +94,18 @@ const ProductEdit = ({
     setDeleteProductClick({
       clickedBy: products._id
     });
+  };
+
+  const handleOnDragEnd = result => {
+    if (!result.destination) {
+      return;
+    }
+
+    const items = Array.from(itemsList);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    updateItemsList(items);
   };
 
   return products.length < 1 ? (
@@ -173,62 +192,89 @@ const ProductEdit = ({
               <Form.Group>
                 <h3>Items:</h3>
                 <hr />
-                <ListGroup>
-                  {!loading &&
-                    productItems.map((item, index) => (
-                      <Fragment key={index}>
-                        <DeleteConfirmModal
-                          type='item'
-                          itemId={item._id}
-                          productId={products._id}
-                          clickedBy={showDeleteItemModalClick.clickedBy}
-                        />{' '}
-                        <ListGroup.Item>
-                          {item.title}{' '}
-                          <Button
-                            variant='success'
-                            type='button'
-                            onClick={e =>
-                              setShowEditForm({
-                                show: !showEditForm.show,
-                                clickedBy: item._id
-                              })
-                            }
-                            style={{ marginLeft: '10px' }}
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            style={{ marginLeft: '10px' }}
-                            variant='danger'
-                            type='button'
-                            onClick={e => {
-                              onDeleteItemClick(e);
-                              setShowDeleteItemModalClick({
-                                clickedBy: item._id
-                              });
-                            }}
-                          >
-                            Delete
-                          </Button>
-                        </ListGroup.Item>
-                        <ProductItemForm
-                          type='edit'
-                          productId={products._id}
-                          itemId={item._id}
-                          clickedBy={showEditForm.clickedBy}
-                          title={item.title}
-                          content={item.content}
-                          videoContent={item.videoContent}
-                          itemDownload1={item.downloadOne}
-                          itemDownload1Title={item.downloadOneTitle}
-                          itemDownload2={item.downloadTwo}
-                          itemDownload2Title={item.downloadTwoTitle}
-                          show={showEditForm.show}
-                        />
-                      </Fragment>
-                    ))}
-                </ListGroup>
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                  <Droppable droppableId='items'>
+                    {provided => (
+                      <ListGroup
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        {!loading &&
+                          itemsList != null &&
+                          itemsList.map((item, index) => (
+                            <Draggable
+                              key={item._id}
+                              draggableId={item._id}
+                              index={index}
+                            >
+                              {provided => (
+                                <div
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  ref={provided.innerRef}
+                                >
+                                  <Fragment>
+                                    <DeleteConfirmModal
+                                      type='item'
+                                      itemId={item._id}
+                                      productId={products._id}
+                                      clickedBy={
+                                        showDeleteItemModalClick.clickedBy
+                                      }
+                                    />{' '}
+                                    <ListGroup.Item>
+                                      {item.title}{' '}
+                                      <Button
+                                        variant='success'
+                                        type='button'
+                                        onClick={e =>
+                                          setShowEditForm({
+                                            show: !showEditForm.show,
+                                            clickedBy: item._id
+                                          })
+                                        }
+                                        style={{ marginLeft: '10px' }}
+                                      >
+                                        Edit
+                                      </Button>
+                                      <Button
+                                        style={{ marginLeft: '10px' }}
+                                        variant='danger'
+                                        type='button'
+                                        onClick={e => {
+                                          onDeleteItemClick(e);
+                                          setShowDeleteItemModalClick({
+                                            clickedBy: item._id
+                                          });
+                                        }}
+                                      >
+                                        Delete
+                                      </Button>
+                                    </ListGroup.Item>
+                                    <ProductItemForm
+                                      type='edit'
+                                      productId={products._id}
+                                      itemId={item._id}
+                                      clickedBy={showEditForm.clickedBy}
+                                      title={item.title}
+                                      content={item.content}
+                                      videoContent={item.videoContent}
+                                      itemDownload1={item.downloadOne}
+                                      itemDownload1Title={item.downloadOneTitle}
+                                      itemDownload2={item.downloadTwo}
+                                      itemDownload2Title={item.downloadTwoTitle}
+                                      show={showEditForm.show}
+                                    />
+                                  </Fragment>
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                        {provided.placeholder}
+                      </ListGroup>
+                    )}
+                  </Droppable>
+                </DragDropContext>
 
                 {showAddItemForm === false ? (
                   <Button
