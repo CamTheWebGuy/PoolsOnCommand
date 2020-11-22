@@ -129,7 +129,6 @@ router.patch(
       'items.$.downloadTwo': sanitizeHtml(downloadTwo),
       'items.$.downloadTwoTitle': sanitizeHtml(downloadTwoTitle)
     };
-    console.log(productFields);
 
     try {
       let product = await Product.findOneAndUpdate(
@@ -144,6 +143,23 @@ router.patch(
     }
   }
 );
+
+// @route    PATCH api/product/sold/:id
+// @desc     Update a Product
+// @access   Private
+router.patch('/sold/:id', [auth], async (req, res) => {
+  try {
+    let product = await Product.findOneAndUpdate(
+      { _id: req.params.id },
+      { $inc: { numberSold: 1 } },
+      { new: true, upsert: true }
+    );
+    res.json(product);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 // @route    PATCH api/product/:id
 // @desc     Update a Product
