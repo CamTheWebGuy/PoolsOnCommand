@@ -21,6 +21,7 @@ import {
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Navbar from './Navbar';
+import Alert from './Alert';
 
 import 'react-quill/dist/quill.snow.css';
 import ProductItemForm from './ProductItemForm';
@@ -111,6 +112,7 @@ const ProductEdit = ({
   return products.length < 1 ? (
     <Fragment>
       <Navbar />
+      <Alert />
       <section className='members__container'>
         <Container className='pdding-top-50 text-center'>
           <Spinner animation='border' role='status'>
@@ -122,6 +124,7 @@ const ProductEdit = ({
   ) : (
     <Fragment>
       <Navbar />
+      <Alert />
       <Container>
         <DeleteConfirmModal
           type='product'
