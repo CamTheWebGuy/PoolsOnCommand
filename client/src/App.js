@@ -16,6 +16,7 @@ import OrderComplete from './components/layout/OrderComplete';
 import CustomizeOrder from './components/layout/CustomizeOrder';
 
 import PrivateRoute from './components/routing/PrivateRoute';
+//import AdminRoute from './components/routing/AdminRoute';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
