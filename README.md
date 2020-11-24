@@ -43,6 +43,7 @@ Makes use of Bootstrap 4
 - [x] Send a receipt on puchase
 - [x] Add functionality for Upsell/Downsell Redirects and Payments.
 - [x] Add functionality to info form on landing page
+- [x] Drag and Drop system to rearrange product items
 - [ ] Add functionality for Bump Offer on Cart/Payment Page.
 - [ ] Add 404 Page
 - [ ] Add "My Orders" page for members - Possibly with ability to cancel subscriptions if they are implemented
@@ -57,8 +58,8 @@ Makes use of Bootstrap 4
 **Members Login**\
 ![Members Login](https://i.imgur.com/FDqaoHs.jpg)\
 **Members Area**\
-![Members Area](https://i.imgur.com/2qkOjOI.jpg)\
+![Members Area](https://i.imgur.com/WzeQ8PO.jpg)\
 **Admin Panel**\
-![Admin Panel](https://i.imgur.com/4yBCYFg.jpg)\
+![Admin Panel](https://i.imgur.com/wVSrG0b.jpg)\
 **Edit Product Page**\
-![Members Area](https://i.imgur.com/Rrkvj6j.jpg)
+![Members Area](https://i.imgur.com/L4sR5uV.jpg)
