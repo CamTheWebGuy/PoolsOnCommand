@@ -21,8 +21,8 @@ Makes use of Bootstrap 4
 - [x] Add Delete Product Functionality
 - [x] Implement Payment System (Stripe, doesn't include subscriptions at this time.)
 - [x] Add Sanitization to User Input Received
+- [x] Implement System to Track Sales Numbers
 - [ ] Double check admin restrictions for routes - (the check is implemented but I didnt add it to all the proper routes yet)
-- [ ] Implement System to Track Sales Numbers
 
 
 
@@ -42,7 +42,7 @@ Makes use of Bootstrap 4
 - [x] Add Purchase Complete Page
 - [x] Send a receipt on puchase
 - [x] Add functionality for Upsell/Downsell Redirects and Payments.
-- [ ] Add functionality to payment form on landing page
+- [x] Add functionality to info form on landing page
 - [ ] Add functionality for Bump Offer on Cart/Payment Page.
 - [ ] Add 404 Page
 - [ ] Add "My Orders" page for members - Possibly with ability to cancel subscriptions if they are implemented
