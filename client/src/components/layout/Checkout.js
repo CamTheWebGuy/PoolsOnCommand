@@ -1,9 +1,8 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import validator from 'validator';
 import { Row, Col, Container, Form } from 'react-bootstrap';
-import { Formik, useFormikContext } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import { loadStripe } from '@stripe/stripe-js';
@@ -395,111 +394,6 @@ const Checkout = ({
                   </Fragment>
                 )}
               />
-
-              {/* <Form className='mgn-top-20'>
-                <Row>
-                  <Col>
-                    <Form.Group>
-                      <Form.Control
-                        name='fName'
-                        type='text'
-                        placeholder='your first name'
-                        value={fName}
-                        onChange={e => onChange(e)}
-                      />
-                    </Form.Group>
-                  </Col>
-
-                  <Col>
-                    <Form.Group>
-                      <Form.Control
-                        name='lName'
-                        type='text'
-                        placeholder='your last name'
-                        value={lName}
-                        onChange={e => onChange(e)}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Form.Group>
-                  <Form.Control
-                    name='email'
-                    type='email'
-                    id='email'
-                    value={email}
-                    placeholder='your email address'
-                    onChange={e => onChange(e)}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Control
-                    name='businessName'
-                    type='text'
-                    placeholder='your business name'
-                    value={businessName}
-                    onChange={e => onChange(e)}
-                  />
-                </Form.Group>
-                <Row>
-                  <Col>
-                    <Form.Control
-                      name='country'
-                      type='text'
-                      placeholder='your country'
-                      value={country}
-                      onChange={e => onChange(e)}
-                    />
-                  </Col>
-                  <Col>
-                    <Form.Control
-                      name='state'
-                      type='text'
-                      placeholder='your state/province'
-                      value={state}
-                      onChange={e => onChange(e)}
-                    />
-                  </Col>
-                  <Col>
-                    <Form.Control
-                      name='zip'
-                      type='text'
-                      value={zip}
-                      placeholder='your zip/area code'
-                      onChange={e => onChange(e)}
-                    />
-                  </Col>
-                </Row>
-                <Row className='mgn-top-10'>
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Password</Form.Label>
-                      <Form.Control
-                        name='password'
-                        type='password'
-                        value={password}
-                        placeholder='Enter a password for your account...'
-                        onChange={e => onChange(e)}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Confirm Password</Form.Label>
-                      <Form.Control
-                        name='passwordConfirm'
-                        type='password'
-                        value={passwordConfirm}
-                        placeholder='Confirm password'
-                        onChange={e => onChange(e)}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-              </Form> */}
             </Col>
             <Col md='4'></Col>
           </Col>

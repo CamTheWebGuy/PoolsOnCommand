@@ -5,11 +5,13 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
 
+const nodemailer = require('nodemailer');
+const mg = require('nodemailer-mailgun-transport');
+
 const { v1: uuidv1 } = require('uuid');
 
 const User = require('../../models/User');
 const Reset = require('../../models/Reset');
-const { reset } = require('nodemon');
 
 // @route    POST api/users
 // @desc     Register User
@@ -119,6 +121,15 @@ router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
 
+    let existingReset = await Reset.findOne({ email });
+
+    if (existingReset) {
+      return res.status(400).json({
+        msg:
+          'User already requested a password reset. Please wait for the previous reset to expire. Resets expire every 2 hours.'
+      });
+    }
+
     const token = uuidv1();
     let user = await User.findOne({ email });
 
@@ -129,6 +140,32 @@ router.post('/forgot-password', async (req, res) => {
         email,
         token
       });
+
+      const auth = {
+        auth: {
+          api_key: config.get('mgApiKey'),
+          domain: config.get('mgDomain')
+        }
+      };
+
+      const nodemailerMailgun = nodemailer.createTransport(mg(auth));
+
+      await nodemailerMailgun.sendMail(
+        {
+          from: 'Pools On Command <no-reply@poolsoncommand.com>',
+          to: `${email}`, // An array if you have multiple recipients.
+          subject: 'Password Reset Request',
+          //You can use "html:" to send HTML email content. It's magic!
+          html: `Hello, <br/> <br /> Someone has recently requested a password reset. If this was not you, please ignore this email and change your password as soon as possible just to be safe. <br/> <br/> Click here to reset your password: <a href='http://localhost:3000/forgot-password/${token}'>http://localhost:3000/forgot-password/${token}</a> <br/> <br/> This link is only valid for 2 hours. <br/> <br/> - The Pools On Command Team`
+        },
+        (err, info) => {
+          if (err) {
+            console.log(`Error: ${err}`);
+          } else {
+            console.log(`Response: ${info}`);
+          }
+        }
+      );
 
       await resetRequest.save();
       res.status(200).json({ msg: 'Reset Request Received' });

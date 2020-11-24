@@ -14,7 +14,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
           <Link to='google.com'>Need help? Email me HERE!</Link>
         </li>
         <li>
-          <Link to='/google.com'>My Account</Link>
+          <Link to='/my-account'>My Account</Link>
         </li>
         {user && !loading && isAuthenticated && user.isAdmin ? (
           <li>

@@ -127,3 +127,45 @@ export const logout = () => dispatch => {
   dispatch({ type: LOGOUT });
   dispatch({ type: CLEAR_PRODUCTS });
 };
+
+// Forgot Password
+export const forgotPassword = email => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const body = JSON.stringify({ email });
+
+  try {
+    await axios.post('/api/users/forgot-password', body, config);
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+  }
+};
+
+// Forgot Password
+export const resetPassword = (token, password) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const body = JSON.stringify({ password });
+
+  try {
+    await axios.patch(`/api/users/forgot-password/${token}`, body, config);
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+  }
+};

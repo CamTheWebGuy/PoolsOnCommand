@@ -11,7 +11,7 @@ const ResetSchema = new mongoose.Schema({
   },
   expiresAt: {
     type: Date,
-    expires: '7200',
+    expires: '2h',
     default: Date.now
   }
 });
