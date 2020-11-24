@@ -51,7 +51,7 @@ const Login = ({ login, isAuthenticated }) => {
             <h3 className='text-weight-700 membershipAccessh3 mgn-top-20'>
               Log Into Your Account:
             </h3>
-            <Form>
+            <Form onSubmit={onSubmit}>
               <Form.Group>
                 <Form.Label>
                   <strong>Email Address</strong>
@@ -77,12 +77,7 @@ const Login = ({ login, isAuthenticated }) => {
                 />
               </Form.Group>
               <Form.Group>
-                <Button
-                  variant='dark'
-                  size='lg'
-                  onClick={e => onSubmit(e)}
-                  block
-                >
+                <Button variant='dark' size='lg' type='submit' block>
                   <strong>LOGIN TO ACCOUNT</strong>
                 </Button>
               </Form.Group>

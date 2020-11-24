@@ -18,6 +18,7 @@ import { register } from '../../actions/auth';
 const Checkout = ({
   addItemToCart,
   clearCart,
+  removeItemCart,
   register,
   loading: loading,
   cartItems: cartItems,
@@ -28,6 +29,7 @@ const Checkout = ({
 }) => {
   const bookId = '5fa30db8df2b6949a1d3b417';
   const audioId = '5fa474736c142c3140b9bb96';
+  const bumpId = '5fbcbc8115071f806c20827f';
 
   const promise = loadStripe('pk_test_nuYT3Yw8YMM78sdDj3EWlhaF');
 
@@ -39,6 +41,7 @@ const Checkout = ({
 
   const [audioBookChecked, setAudioBookChecked] = useState(true);
   const [eBookChecked, seteBookChecked] = useState(false);
+  const [bumpChecked, setBumpChecked] = useState(false);
 
   const [formData, setFormData] = useState({
     fName: '',
@@ -130,6 +133,22 @@ const Checkout = ({
       await clearCart();
       await addItemToCart(bookId);
       console.log('book checked');
+    }
+  };
+
+  const handleBump = e => {
+    setBumpChecked(!bumpChecked);
+
+    // Prevents duplicate additions of bump item to cart
+    if (e.target.checked && bumpChecked === true) {
+      return;
+    }
+
+    if (e.target.checked) {
+      removeItemCart(bumpId);
+      addItemToCart(bumpId);
+    } else {
+      removeItemCart(bumpId);
     }
   };
 
@@ -367,6 +386,8 @@ const Checkout = ({
                           <Form.Check
                             label='Yes, Show Me Inside Your Business'
                             name='formHorizontalRadios'
+                            checked={bumpChecked}
+                            onChange={e => handleBump(e)}
                           />
                         </Row>
                       </Form>
