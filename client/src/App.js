@@ -14,8 +14,12 @@ import DS1 from './components/layout/DS1';
 import DS2 from './components/layout/DS2';
 import OrderComplete from './components/layout/OrderComplete';
 import CustomizeOrder from './components/layout/CustomizeOrder';
+import MyAccount from './components/layout/MyAccount';
+import ForgotPassword from './components/layout/ForgotPassword';
+import ForgotPasswordReset from './components/layout/ForgotPasswordReset';
 
 import PrivateRoute from './components/routing/PrivateRoute';
+//import AdminRoute from './components/routing/AdminRoute';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -49,9 +53,16 @@ function App() {
             <Route exact path='/order-complete' component={OrderComplete} />
             <Route exact path='/customize-order' component={CustomizeOrder} />
             <Route exact path='/members-login' component={Login} />
+            <Route exact path='/forgot-password' component={ForgotPassword} />
+            <Route
+              exact
+              path='/forgot-password/:token'
+              component={ForgotPasswordReset}
+            />
             <PrivateRoute exact path='/members-area' component={MembersArea} />
             <PrivateRoute exact path='/admin-panel' component={AdminPanel} />
             <PrivateRoute exact path='/product/:id' component={ProductEdit} />
+            <PrivateRoute exact path='/my-account' component={MyAccount} />
           </Switch>
         </Fragment>
       </Router>

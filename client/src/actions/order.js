@@ -11,16 +11,9 @@ import {
 // Get Orders
 export const getOrderById = ordersArray => async dispatch => {
   try {
-    //const { data } = await axios.get(`/api/order/myorders/${id}`);
-
     const items = await axios.all(
       ordersArray.map(item => axios.get(`api/order/myorders/${item}`))
     );
-
-    // console.log('THESE ARE ITEMS');
-    // console.log(items);
-
-    //const orderTotal = data.totalPrice;
 
     let orderTotal = '';
 
@@ -28,9 +21,6 @@ export const getOrderById = ordersArray => async dispatch => {
       orderTotal = +orderTotal + +item.data.totalPrice;
       orderTotal = orderTotal.toString();
     });
-
-    console.log('order total');
-    console.log(orderTotal);
 
     dispatch({
       type: ADD_ORDER_TOTAL,
@@ -90,6 +80,9 @@ export const addOrder = cartItems => async dispatch => {
     });
 
     const { data } = await axios.post('/api/order', body, config);
+    await axios.all(
+      cartItems.map(item => axios.patch(`api/product/sold/${item._id}`))
+    );
     dispatch({
       type: ADD_USER_ORDER,
       payload: data._id

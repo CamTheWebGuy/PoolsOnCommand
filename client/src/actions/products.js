@@ -183,7 +183,13 @@ export const addProduct = (name, price, category) => async dispatch => {
 };
 
 // Update Product
-export const updateProduct = (id, name, price, category) => async dispatch => {
+export const updateProduct = (
+  id,
+  name,
+  price,
+  category,
+  items
+) => async dispatch => {
   try {
     const config = {
       withCredentials: true,
@@ -193,7 +199,7 @@ export const updateProduct = (id, name, price, category) => async dispatch => {
       }
     };
 
-    const body = JSON.stringify({ name, price, category });
+    const body = JSON.stringify({ name, price, category, items });
 
     await axios.patch(`/api/product/${id}`, body, config);
 

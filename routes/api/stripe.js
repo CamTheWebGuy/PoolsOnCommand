@@ -35,8 +35,6 @@ router.post('/charge', async (req, res) => {
   const { id, cartItems, email } = req.body;
   const products = [];
 
-  console.log(email);
-
   try {
     cartItems.forEach(e => {
       products.push(e._id);
@@ -50,7 +48,6 @@ router.post('/charge', async (req, res) => {
       payment_method: id,
       confirm: true
     });
-    //console.log(payment);
 
     return res.status(200).json({ confirm: 'success' });
   } catch (err) {

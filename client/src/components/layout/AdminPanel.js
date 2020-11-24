@@ -84,8 +84,10 @@ const AdminPanel = ({
                     <tr key={index}>
                       <th>${item.price}</th>
                       <th>{item.name}</th>
-                      <td>6</td>
-                      <td>$299.94</td>
+                      <td>{item.numberSold}</td>
+                      <td>
+                        ${parseFloat(item.price * item.numberSold).toFixed(2)}
+                      </td>
                       <td>
                         <Button href={`/product/${item._id}`} variant='danger'>
                           Edit/Delete

@@ -68,17 +68,20 @@ const MembersArea = ({ getProducts, products: { products, loading } }) => {
                                   <div>
                                     {innerItem.downloadOne && (
                                       <Fragment>
-                                        <h4 className='text-roboto text-weight-700 uppercase'>
-                                          <em>Resources</em>
-                                        </h4>
-                                        <Button
-                                          variant='success'
-                                          size='lg'
-                                          className='color-yellow-btn uppercase mgn-top-10 mgn-right-15'
-                                          href={innerItem.downloadOne}
-                                        >
-                                          {innerItem.downloadOneTitle}
-                                        </Button>
+                                        <div className='mgn-btm-30'>
+                                          {' '}
+                                          <h4 className='text-roboto text-weight-700 uppercase'>
+                                            <em>Resources</em>
+                                          </h4>
+                                          <Button
+                                            variant='success'
+                                            size='lg'
+                                            className='color-yellow-btn uppercase mgn-top-10 mgn-right-15'
+                                            href={innerItem.downloadOne}
+                                          >
+                                            {innerItem.downloadOneTitle}
+                                          </Button>
+                                        </div>
                                       </Fragment>
                                     )}
                                     {innerItem.downloadTwo && (
@@ -94,7 +97,7 @@ const MembersArea = ({ getProducts, products: { products, loading } }) => {
                                   </div>
                                   {innerItem.content && (
                                     <Fragment>
-                                      <h4 className='text-weight-700 uppercase text-roboto mgn-top-30'>
+                                      <h4 className='text-weight-700 uppercase text-roboto'>
                                         <em>About This Component</em>
                                       </h4>
                                       {ReactHtmlParser(innerItem.content)}

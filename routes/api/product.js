@@ -129,7 +129,6 @@ router.patch(
       'items.$.downloadTwo': sanitizeHtml(downloadTwo),
       'items.$.downloadTwoTitle': sanitizeHtml(downloadTwoTitle)
     };
-    console.log(productFields);
 
     try {
       let product = await Product.findOneAndUpdate(
@@ -145,6 +144,23 @@ router.patch(
   }
 );
 
+// @route    PATCH api/product/sold/:id
+// @desc     Update a Product
+// @access   Private
+router.patch('/sold/:id', [auth], async (req, res) => {
+  try {
+    let product = await Product.findOneAndUpdate(
+      { _id: req.params.id },
+      { $inc: { numberSold: 1 } },
+      { new: true, upsert: true }
+    );
+    res.json(product);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route    PATCH api/product/:id
 // @desc     Update a Product
 // @access   Private/Admin
@@ -156,8 +172,7 @@ router.patch(
       check('name', 'Product name is required')
         .not()
         .isEmpty()
-        .trim()
-        .escape(),
+        .trim(),
       check('price', 'Product price is required')
         .not()
         .isEmpty()
@@ -171,7 +186,6 @@ router.patch(
       check('price', 'Price must be a number')
         .isFloat()
         .trim()
-        .escape()
     ]
   ],
   async (req, res) => {
@@ -180,12 +194,13 @@ router.patch(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, price, category } = req.body;
+    const { name, price, category, items } = req.body;
 
     const productFields = {
       name,
       price,
-      category
+      category,
+      items
     };
 
     try {
