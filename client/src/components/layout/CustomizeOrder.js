@@ -22,14 +22,27 @@ const CustomizeOrder = ({ removeItemCart, cartItems: cartItems }) => {
 
   return (
     <Fragment>
+      <section className='not-complete text-center'>
+        <h4>
+          <strong>
+            IMPORTANT: Do NOT Close This Window Or Click The "Back" Button.
+          </strong>
+        </h4>
+        <p>
+          <strong>
+            Clicking your "back" button can result in your order being
+            double-billed
+          </strong>
+        </p>
+      </section>
       <section className='order__complete'>
         <Container>
           <Row>
             <Col md='12'>
               <div className='order__complete-content text-center'>
-                <h4 className='mgn-top-20'>
-                  Pools On Command - Order Customization
-                </h4>
+                <h3 className='mgn-top-20'>
+                  <strong>WAIT! YOUR ORDER IS NOT YET COMPLETE!</strong>
+                </h3>
                 <div className='order__complete-box mgn-top-50'>
                   <h1 className='pdding-top-30'>
                     <strong>Customize Your Order</strong>
@@ -42,6 +55,7 @@ const CustomizeOrder = ({ removeItemCart, cartItems: cartItems }) => {
                     <Table style={{ width: '80%', margin: '0 auto' }}>
                       <thead style={{ background: 'white' }}>
                         <tr>
+                          <th></th>
                           <th>Product</th>
                           <th>Quantity</th>
                           <th>Price</th>
@@ -50,6 +64,16 @@ const CustomizeOrder = ({ removeItemCart, cartItems: cartItems }) => {
                       <tbody>
                         {cartItems.map(item => (
                           <tr>
+                            <td>
+                              <Button
+                                variant='danger'
+                                onClick={e => {
+                                  removeItemCart(item._id);
+                                }}
+                              >
+                                <i class='fas fa-trash-alt'></i>
+                              </Button>
+                            </td>
                             <td>
                               <strong>{item.name}</strong>
                             </td>
