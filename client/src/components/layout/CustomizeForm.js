@@ -93,7 +93,7 @@ const CustomizeForm = ({
       }}
       disabled={!stripe}
     >
-      <p>A seperate order will be placed for the above items.</p>
+      <p>A seperate order will be placed for the above add-ons.</p>
       <CardElement
         id='card-element'
         options={cardStyle}
@@ -132,7 +132,6 @@ const CustomizeForm = ({
 };
 
 CustomizeForm.propTypes = {
-  register: PropTypes.func.isRequired,
   addError: PropTypes.func.isRequired,
   addOrder: PropTypes.func.isRequired,
   errorLoadingFalse: PropTypes.func.isRequired

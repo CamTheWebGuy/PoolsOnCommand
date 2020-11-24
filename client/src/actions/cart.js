@@ -53,10 +53,11 @@ export const addItemToCart = productId => async dispatch => {
 
 export const removeItemCart = productId => async dispatch => {
   try {
-    const product = await axios.get(`/api/product/${productId}`);
+    //const product = await axios.get(`/api/product/${productId}`);
+
     dispatch({
       type: REMOVE_PRODUCT_CART,
-      payload: product.data
+      payload: productId
     });
   } catch (err) {
     dispatch(setAlert('Error removing item from cart', 'danger'));

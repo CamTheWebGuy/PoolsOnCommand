@@ -23,6 +23,19 @@ const OTO1 = ({ addItemToCart, clearCart }) => {
 
   return (
     <Fragment>
+      <section className='not-complete text-center'>
+        <h4>
+          <strong>
+            IMPORTANT: Do NOT Close This Window Or Click The "Back" Button.
+          </strong>
+        </h4>
+        <p>
+          <strong>
+            Clicking your "back" button can result in your order being
+            double-billed
+          </strong>
+        </p>
+      </section>
       <section className='oto__header'>
         <Container>
           <Row>
@@ -50,11 +63,10 @@ const OTO1 = ({ addItemToCart, clearCart }) => {
                   </Col>
                 </Row>
                 <h1 className='mgn-top-20 color-white'>
-                  <strong>Welcome To The 2 Hour Agency</strong>
+                  <strong>Wait! Your Order Is Not Complete Yet!</strong>
                 </h1>
                 <p className='color-white fsize-24 mgn-top-20'>
-                  Please Watch This Short Video In Full While
-                  <br /> Your 2 Hour Agency Account Is Created
+                  Please Watch This Important Message Below Now:
                 </p>
                 <iframe
                   src='https://player.vimeo.com/video/100902001?title=0&byline=0&portrait=0'

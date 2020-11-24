@@ -1381,6 +1381,12 @@ img {
   padding-bottom: 20px;
 }
 
+.not-complete{
+  background: orange;
+  color: white;
+  padding: 5px;
+}
+
 
 
 

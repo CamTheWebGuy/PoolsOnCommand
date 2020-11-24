@@ -19,6 +19,19 @@ const OTO2 = ({ addItemToCart }) => {
   };
   return (
     <Fragment>
+      <section className='not-complete text-center'>
+        <h4>
+          <strong>
+            IMPORTANT: Do NOT Close This Window Or Click The "Back" Button.
+          </strong>
+        </h4>
+        <p>
+          <strong>
+            Clicking your "back" button can result in your order being
+            double-billed
+          </strong>
+        </p>
+      </section>
       <section className='oto__header' style={{ background: '#1b4b7d' }}>
         <Container>
           <Row>

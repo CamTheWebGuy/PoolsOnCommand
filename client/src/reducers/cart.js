@@ -27,7 +27,7 @@ export default function(state = initialState, action) {
     case REMOVE_PRODUCT_CART:
       return {
         ...state,
-        cartItems: [...state.cartItems.filter(a => a._id !== payload._id)],
+        cartItems: [...state.cartItems.filter(a => a._id !== payload)],
         loading: false
       };
     case CLEAR_CART:
